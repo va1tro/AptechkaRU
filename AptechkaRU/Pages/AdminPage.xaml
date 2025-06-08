@@ -6,9 +6,75 @@
       xmlns:local="clr-namespace:AptechkaRU.Pages"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
-      Title="AdminPage">
+      Title="AdminPage" Background="#E0F7FA">
 
-    <Grid>
-        
+    <Grid Margin="20">
+        <!-- Основной контейнер -->
+        <Border Background="White" CornerRadius="20" BorderBrush="#4DB6AC" BorderThickness="2" Padding="20">
+            <DockPanel LastChildFill="True">
+
+                <!-- Заголовок и кнопки -->
+                <StackPanel DockPanel.Dock="Top" Margin="0 0 0 10">
+                    <TextBlock Text="Управление лекарствами"
+                               FontSize="28"
+                               FontWeight="Bold"
+                               Foreground="#00695C"
+                               HorizontalAlignment="Center"
+                               Margin="0 0 0 20"/>
+
+                    <!-- Панель поиска и фильтрации -->
+                    <WrapPanel Margin="0 0 0 10" HorizontalAlignment="Left">
+                        <TextBox x:Name="SearchTextBox"
+                                 Width="200"
+                                 Margin="0 0 10 0"
+                                 Height="30"
+                                  />
+
+                        <ComboBox x:Name="FilterComboBox"
+                                  Width="150"
+                                  Height="30"
+                                  Margin="0 0 10 0"
+                                  />
+
+                        <ComboBox x:Name="SortComboBox"
+                                  Width="150"
+                                  Height="30"
+                                  />
+                    </WrapPanel>
+
+                    <!-- Панель кнопок -->
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0 0 0 10">
+                        <Button Content="Добавить"
+                                Click="AddButton_Click"
+                                Background="#4DB6AC"
+                                Foreground="White"
+                                Padding="10 5"
+                                FontWeight="Bold"
+                                Margin="0 0 10 0"
+                                Cursor="Hand"/>
+                        <Button Content="Редактировать"
+                                Click="EditButton_Click"
+                                Background="#4DB6AC"
+                                Foreground="White"
+                                Padding="10 5"
+                                FontWeight="Bold"
+                                Margin="0 0 10 0"
+                                Cursor="Hand"/>
+                        <Button Content="Удалить"
+                                Click="DeleteButton_Click"
+                                Background="#E57373"
+                                Foreground="White"
+                                Padding="10 5"
+                                FontWeight="Bold"
+                                Cursor="Hand"/>
+                    </StackPanel>
+                </StackPanel>
+
+                <!-- Карточки лекарств -->
+                <ScrollViewer>
+                    <WrapPanel x:Name="MedicineWrapPanel" HorizontalAlignment="Center" />
+                </ScrollViewer>
+            </DockPanel>
+        </Border>
     </Grid>
 </Page>
