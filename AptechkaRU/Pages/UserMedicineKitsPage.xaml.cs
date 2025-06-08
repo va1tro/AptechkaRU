@@ -82,6 +82,6 @@ namespace AptechkaRU.Pages
         {
             NavigationService.GoBack();
         }
-    }
+    }  
 }
 
