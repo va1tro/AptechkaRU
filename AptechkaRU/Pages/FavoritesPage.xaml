@@ -1,0 +1,55 @@
+﻿<Page x:Class="AptechkaRU.Pages.FavoritesPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:AptechkaRU.Pages"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="FavoritesPage" Background="#E0F7F4">
+
+    <ScrollViewer>
+        <StackPanel Margin="20">
+            <TextBlock Text="Избранные лекарства" 
+                       FontSize="28" FontWeight="Bold" 
+                       Foreground="#2B7A78" Margin="0,0,0,20"/>
+            <Button Content="← Назад" Width="80" Height="30" Background="Transparent"
+        BorderBrush="Transparent" BorderThickness="1" Foreground="#007979"
+        FontWeight="Normal" Margin="0,0,0,10" Click="BackButton_Click"/>
+            <ItemsControl x:Name="FavoritesList">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border Background="White" CornerRadius="15" Padding="15" Margin="0,0,0,20" 
+                                BorderBrush="#3AAFA9" BorderThickness="1">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+
+                                <Image Source="{Binding Medicines.CurrentPhoto}" Width="100" Height="100" Margin="10" />
+
+                                <StackPanel Grid.Column="1" Margin="10,0" VerticalAlignment="Center">
+                                    <TextBlock Text="{Binding name}" 
+                                               FontSize="16" FontWeight="Bold" Foreground="#2B7A78"/>
+                                    <TextBlock Text="{Binding description}" 
+                                               FontSize="14" Foreground="#17252A" 
+                                               TextWrapping="Wrap" MaxHeight="50"/>
+                                    <TextBlock Text="{Binding price, StringFormat={}{0:N} руб.}" 
+                                               FontSize="14" Foreground="#3AAFA9"/>
+                                </StackPanel>
+
+                                <Button Grid.Column="2" Content="Удалить"
+                                        Background="#3AAFA9" Foreground="White" Padding="10,5"
+                                        Margin="10" Click="RemoveFromFavorites_Click"
+                                        Tag="{Binding favorite_id}"
+                                        Cursor="Hand"/>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </StackPanel>
+    </ScrollViewer>
+</Page>

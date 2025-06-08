@@ -1,0 +1,31 @@
+﻿<Page x:Class="AptechkaRU.Pages.AddKitMedicinePage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:AptechkaRU.Pages"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="AddKitMedicinePage" Background="#E0F7FA">
+
+    <Grid Margin="20">
+        <Border Background="White" CornerRadius="20" Padding="20" BorderBrush="#4DB6AC" BorderThickness="2">
+            <StackPanel>
+                <TextBlock Text="Добавить лекарство в аптечку" FontSize="20" FontWeight="Bold" Foreground="#008080" Margin="0 0 0 20" HorizontalAlignment="Center"/>
+                <TextBlock Text="Выберите лекарство" FontSize="14" Foreground="#4DB6AC"/>
+                <ComboBox x:Name="MedicineComboBox" DisplayMemberPath="name" SelectedValuePath="medicine_id"
+                          Margin="0 0 0 10" Height="30" Background="#F0FFFF" Foreground="Black"/>
+                <TextBlock Text="Количество" FontSize="14" Foreground="#4DB6AC"/>
+                <TextBox x:Name="QuantityTextBox" Margin="0 0 0 10" Height="30" Background="#F0FFFF" Foreground="Black"/>
+                <TextBlock Text="Дата добавления" FontSize="14" Foreground="#4DB6AC"/>
+                <DatePicker x:Name="ExpiryDatePicker" Margin="0 0 0 10" Background="#F0FFFF"/>
+                <TextBlock Text="Заметки" FontSize="14" Foreground="#4DB6AC"/>
+                <TextBox x:Name="NotesTextBox" Margin="0 0 0 10" Height="60" AcceptsReturn="True"
+                         Background="#F0FFFF" Foreground="Black" TextWrapping="Wrap"/>
+
+                <Button Content="Добавить" Height="35" Background="#4DB6AC" Foreground="White" Click="AddButton_Click"/>
+                <Button Content="Назад" Height="35" Margin="0,10,0,0" Background="White" Foreground="#4DB6AC" Click="btnBack_Click"/>
+            </StackPanel>
+        </Border>
+    </Grid>
+</Page>

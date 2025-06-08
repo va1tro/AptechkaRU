@@ -1,0 +1,1102 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="Хранилище AptechkaRUModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Cart">
+          <Key>
+            <PropertyRef Name="cart_id" />
+          </Key>
+          <Property Name="cart_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="user_id" Type="int" Nullable="false" />
+          <Property Name="medicine_id" Type="int" Nullable="false" />
+          <Property Name="quantity" Type="int" Nullable="false" />
+          <Property Name="added_at" Type="datetime" />
+        </EntityType>
+        <EntityType Name="Favorites">
+          <Key>
+            <PropertyRef Name="favorite_id" />
+          </Key>
+          <Property Name="favorite_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="user_id" Type="int" Nullable="false" />
+          <Property Name="medicine_id" Type="int" Nullable="false" />
+          <Property Name="added_at" Type="datetime" />
+        </EntityType>
+        <EntityType Name="KitMedicines">
+          <Key>
+            <PropertyRef Name="kit_medicine_id" />
+          </Key>
+          <Property Name="kit_medicine_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="kit_id" Type="int" Nullable="false" />
+          <Property Name="medicine_id" Type="int" Nullable="false" />
+          <Property Name="quantity" Type="int" Nullable="false" />
+          <Property Name="expiry_date" Type="date" />
+          <Property Name="notes" Type="nvarchar" MaxLength="255" />
+        </EntityType>
+        <EntityType Name="Manufacturers">
+          <Key>
+            <PropertyRef Name="manufacturer_id" />
+          </Key>
+          <Property Name="manufacturer_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="manufacturer_name" Type="nvarchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="MedicineCategories">
+          <Key>
+            <PropertyRef Name="category_id" />
+          </Key>
+          <Property Name="category_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="description" Type="nvarchar" MaxLength="255" />
+          <Property Name="parent_category_id" Type="int" />
+        </EntityType>
+        <EntityType Name="Medicines">
+          <Key>
+            <PropertyRef Name="medicine_id" />
+          </Key>
+          <Property Name="medicine_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="description" Type="nvarchar(max)" />
+          <Property Name="manufacturer_id" Type="int" Nullable="false" />
+          <Property Name="category_id" Type="int" Nullable="false" />
+          <Property Name="price" Type="decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="requires_prescription" Type="bit" />
+          <Property Name="stock_quantity" Type="int" />
+          <Property Name="image_url" Type="nvarchar" MaxLength="255" />
+        </EntityType>
+        <EntityType Name="Pharmacies">
+          <Key>
+            <PropertyRef Name="pharmacy_id" />
+          </Key>
+          <Property Name="pharmacy_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="address" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="phone" Type="nvarchar" MaxLength="20" />
+          <Property Name="working_hours" Type="nvarchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="PurchasedMedicines">
+          <Key>
+            <PropertyRef Name="purchased_medicine_id" />
+          </Key>
+          <Property Name="purchased_medicine_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="purchase_id" Type="int" Nullable="false" />
+          <Property Name="medicine_id" Type="int" Nullable="false" />
+          <Property Name="quantity" Type="int" Nullable="false" />
+          <Property Name="price_per_unit" Type="decimal" Precision="10" Scale="2" Nullable="false" />
+        </EntityType>
+        <EntityType Name="PurchaseHistory">
+          <Key>
+            <PropertyRef Name="purchase_id" />
+          </Key>
+          <Property Name="purchase_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="user_id" Type="int" Nullable="false" />
+          <Property Name="pharmacy_id" Type="int" Nullable="false" />
+          <Property Name="purchase_date" Type="datetime" />
+          <Property Name="total_amount" Type="decimal" Precision="10" Scale="2" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Reminders">
+          <Key>
+            <PropertyRef Name="reminder_id" />
+          </Key>
+          <Property Name="reminder_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="user_id" Type="int" Nullable="false" />
+          <Property Name="medicine_id" Type="int" Nullable="false" />
+          <Property Name="kit_id" Type="int" />
+          <Property Name="dosage" Type="nvarchar" MaxLength="50" />
+          <Property Name="frequency" Type="nvarchar" MaxLength="50" />
+          <Property Name="start_date" Type="date" Nullable="false" />
+          <Property Name="end_date" Type="date" />
+          <Property Name="is_active" Type="bit" />
+        </EntityType>
+        <EntityType Name="Roles">
+          <Key>
+            <PropertyRef Name="role_id" />
+          </Key>
+          <Property Name="role_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="role_name" Type="nvarchar" MaxLength="30" Nullable="false" />
+        </EntityType>
+        <EntityType Name="UserMedicineKits">
+          <Key>
+            <PropertyRef Name="kit_id" />
+          </Key>
+          <Property Name="kit_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="user_id" Type="int" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="description" Type="nvarchar" MaxLength="255" />
+          <Property Name="created_at" Type="datetime" />
+        </EntityType>
+        <EntityType Name="Users">
+          <Key>
+            <PropertyRef Name="user_id" />
+          </Key>
+          <Property Name="user_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="login" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="email" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="password" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="first_name" Type="nvarchar" MaxLength="50" />
+          <Property Name="middle_name" Type="nvarchar" MaxLength="50" />
+          <Property Name="last_name" Type="nvarchar" MaxLength="50" />
+          <Property Name="phone" Type="nvarchar" MaxLength="20" />
+          <Property Name="role_id" Type="int" Nullable="false" />
+        </EntityType>
+        <Association Name="FK__Cart__medicine_i__534D60F1">
+          <End Role="Medicines" Type="Self.Medicines" Multiplicity="1" />
+          <End Role="Cart" Type="Self.Cart" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Medicines">
+              <PropertyRef Name="medicine_id" />
+            </Principal>
+            <Dependent Role="Cart">
+              <PropertyRef Name="medicine_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Cart__user_id__52593CB8">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="Cart" Type="Self.Cart" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="user_id" />
+            </Principal>
+            <Dependent Role="Cart">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Favorites__medic__59063A47">
+          <End Role="Medicines" Type="Self.Medicines" Multiplicity="1" />
+          <End Role="Favorites" Type="Self.Favorites" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Medicines">
+              <PropertyRef Name="medicine_id" />
+            </Principal>
+            <Dependent Role="Favorites">
+              <PropertyRef Name="medicine_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Favorites__user___5812160E">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="Favorites" Type="Self.Favorites" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="user_id" />
+            </Principal>
+            <Dependent Role="Favorites">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__KitMedici__kit_i__3D5E1FD2">
+          <End Role="UserMedicineKits" Type="Self.UserMedicineKits" Multiplicity="1" />
+          <End Role="KitMedicines" Type="Self.KitMedicines" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserMedicineKits">
+              <PropertyRef Name="kit_id" />
+            </Principal>
+            <Dependent Role="KitMedicines">
+              <PropertyRef Name="kit_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__KitMedici__medic__3E52440B">
+          <End Role="Medicines" Type="Self.Medicines" Multiplicity="1" />
+          <End Role="KitMedicines" Type="Self.KitMedicines" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Medicines">
+              <PropertyRef Name="medicine_id" />
+            </Principal>
+            <Dependent Role="KitMedicines">
+              <PropertyRef Name="medicine_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__MedicineC__paren__29572725">
+          <End Role="MedicineCategories" Type="Self.MedicineCategories" Multiplicity="0..1" />
+          <End Role="MedicineCategories1" Type="Self.MedicineCategories" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MedicineCategories">
+              <PropertyRef Name="category_id" />
+            </Principal>
+            <Dependent Role="MedicineCategories1">
+              <PropertyRef Name="parent_category_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Medicines__categ__35BCFE0A">
+          <End Role="MedicineCategories" Type="Self.MedicineCategories" Multiplicity="1" />
+          <End Role="Medicines" Type="Self.Medicines" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MedicineCategories">
+              <PropertyRef Name="category_id" />
+            </Principal>
+            <Dependent Role="Medicines">
+              <PropertyRef Name="category_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Medicines__manuf__34C8D9D1">
+          <End Role="Manufacturers" Type="Self.Manufacturers" Multiplicity="1" />
+          <End Role="Medicines" Type="Self.Medicines" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Manufacturers">
+              <PropertyRef Name="manufacturer_id" />
+            </Principal>
+            <Dependent Role="Medicines">
+              <PropertyRef Name="manufacturer_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Purchased__medic__4CA06362">
+          <End Role="Medicines" Type="Self.Medicines" Multiplicity="1" />
+          <End Role="PurchasedMedicines" Type="Self.PurchasedMedicines" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Medicines">
+              <PropertyRef Name="medicine_id" />
+            </Principal>
+            <Dependent Role="PurchasedMedicines">
+              <PropertyRef Name="medicine_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Purchased__purch__4BAC3F29">
+          <End Role="PurchaseHistory" Type="Self.PurchaseHistory" Multiplicity="1" />
+          <End Role="PurchasedMedicines" Type="Self.PurchasedMedicines" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PurchaseHistory">
+              <PropertyRef Name="purchase_id" />
+            </Principal>
+            <Dependent Role="PurchasedMedicines">
+              <PropertyRef Name="purchase_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__PurchaseH__pharm__48CFD27E">
+          <End Role="Pharmacies" Type="Self.Pharmacies" Multiplicity="1" />
+          <End Role="PurchaseHistory" Type="Self.PurchaseHistory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Pharmacies">
+              <PropertyRef Name="pharmacy_id" />
+            </Principal>
+            <Dependent Role="PurchaseHistory">
+              <PropertyRef Name="pharmacy_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__PurchaseH__user___47DBAE45">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="PurchaseHistory" Type="Self.PurchaseHistory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="user_id" />
+            </Principal>
+            <Dependent Role="PurchaseHistory">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Reminders__kit_i__440B1D61">
+          <End Role="UserMedicineKits" Type="Self.UserMedicineKits" Multiplicity="0..1" />
+          <End Role="Reminders" Type="Self.Reminders" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserMedicineKits">
+              <PropertyRef Name="kit_id" />
+            </Principal>
+            <Dependent Role="Reminders">
+              <PropertyRef Name="kit_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Reminders__medic__4316F928">
+          <End Role="Medicines" Type="Self.Medicines" Multiplicity="1" />
+          <End Role="Reminders" Type="Self.Reminders" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Medicines">
+              <PropertyRef Name="medicine_id" />
+            </Principal>
+            <Dependent Role="Reminders">
+              <PropertyRef Name="medicine_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Reminders__user___4222D4EF">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="Reminders" Type="Self.Reminders" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="user_id" />
+            </Principal>
+            <Dependent Role="Reminders">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__UserMedic__user___398D8EEE">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="UserMedicineKits" Type="Self.UserMedicineKits" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="user_id" />
+            </Principal>
+            <Dependent Role="UserMedicineKits">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Users__role_id__300424B4">
+          <End Role="Roles" Type="Self.Roles" Multiplicity="1" />
+          <End Role="Users" Type="Self.Users" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Roles">
+              <PropertyRef Name="role_id" />
+            </Principal>
+            <Dependent Role="Users">
+              <PropertyRef Name="role_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Хранилище AptechkaRUModelContainer">
+          <EntitySet Name="Cart" EntityType="Self.Cart" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Favorites" EntityType="Self.Favorites" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="KitMedicines" EntityType="Self.KitMedicines" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Manufacturers" EntityType="Self.Manufacturers" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MedicineCategories" EntityType="Self.MedicineCategories" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Medicines" EntityType="Self.Medicines" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Pharmacies" EntityType="Self.Pharmacies" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PurchasedMedicines" EntityType="Self.PurchasedMedicines" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PurchaseHistory" EntityType="Self.PurchaseHistory" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Reminders" EntityType="Self.Reminders" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Roles" EntityType="Self.Roles" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserMedicineKits" EntityType="Self.UserMedicineKits" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__Cart__medicine_i__534D60F1" Association="Self.FK__Cart__medicine_i__534D60F1">
+            <End Role="Medicines" EntitySet="Medicines" />
+            <End Role="Cart" EntitySet="Cart" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Cart__user_id__52593CB8" Association="Self.FK__Cart__user_id__52593CB8">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Cart" EntitySet="Cart" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Favorites__medic__59063A47" Association="Self.FK__Favorites__medic__59063A47">
+            <End Role="Medicines" EntitySet="Medicines" />
+            <End Role="Favorites" EntitySet="Favorites" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Favorites__user___5812160E" Association="Self.FK__Favorites__user___5812160E">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Favorites" EntitySet="Favorites" />
+          </AssociationSet>
+          <AssociationSet Name="FK__KitMedici__kit_i__3D5E1FD2" Association="Self.FK__KitMedici__kit_i__3D5E1FD2">
+            <End Role="UserMedicineKits" EntitySet="UserMedicineKits" />
+            <End Role="KitMedicines" EntitySet="KitMedicines" />
+          </AssociationSet>
+          <AssociationSet Name="FK__KitMedici__medic__3E52440B" Association="Self.FK__KitMedici__medic__3E52440B">
+            <End Role="Medicines" EntitySet="Medicines" />
+            <End Role="KitMedicines" EntitySet="KitMedicines" />
+          </AssociationSet>
+          <AssociationSet Name="FK__MedicineC__paren__29572725" Association="Self.FK__MedicineC__paren__29572725">
+            <End Role="MedicineCategories" EntitySet="MedicineCategories" />
+            <End Role="MedicineCategories1" EntitySet="MedicineCategories" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Medicines__categ__35BCFE0A" Association="Self.FK__Medicines__categ__35BCFE0A">
+            <End Role="MedicineCategories" EntitySet="MedicineCategories" />
+            <End Role="Medicines" EntitySet="Medicines" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Medicines__manuf__34C8D9D1" Association="Self.FK__Medicines__manuf__34C8D9D1">
+            <End Role="Manufacturers" EntitySet="Manufacturers" />
+            <End Role="Medicines" EntitySet="Medicines" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Purchased__medic__4CA06362" Association="Self.FK__Purchased__medic__4CA06362">
+            <End Role="Medicines" EntitySet="Medicines" />
+            <End Role="PurchasedMedicines" EntitySet="PurchasedMedicines" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Purchased__purch__4BAC3F29" Association="Self.FK__Purchased__purch__4BAC3F29">
+            <End Role="PurchaseHistory" EntitySet="PurchaseHistory" />
+            <End Role="PurchasedMedicines" EntitySet="PurchasedMedicines" />
+          </AssociationSet>
+          <AssociationSet Name="FK__PurchaseH__pharm__48CFD27E" Association="Self.FK__PurchaseH__pharm__48CFD27E">
+            <End Role="Pharmacies" EntitySet="Pharmacies" />
+            <End Role="PurchaseHistory" EntitySet="PurchaseHistory" />
+          </AssociationSet>
+          <AssociationSet Name="FK__PurchaseH__user___47DBAE45" Association="Self.FK__PurchaseH__user___47DBAE45">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="PurchaseHistory" EntitySet="PurchaseHistory" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Reminders__kit_i__440B1D61" Association="Self.FK__Reminders__kit_i__440B1D61">
+            <End Role="UserMedicineKits" EntitySet="UserMedicineKits" />
+            <End Role="Reminders" EntitySet="Reminders" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Reminders__medic__4316F928" Association="Self.FK__Reminders__medic__4316F928">
+            <End Role="Medicines" EntitySet="Medicines" />
+            <End Role="Reminders" EntitySet="Reminders" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Reminders__user___4222D4EF" Association="Self.FK__Reminders__user___4222D4EF">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Reminders" EntitySet="Reminders" />
+          </AssociationSet>
+          <AssociationSet Name="FK__UserMedic__user___398D8EEE" Association="Self.FK__UserMedic__user___398D8EEE">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="UserMedicineKits" EntitySet="UserMedicineKits" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Users__role_id__300424B4" Association="Self.FK__Users__role_id__300424B4">
+            <End Role="Roles" EntitySet="Roles" />
+            <End Role="Users" EntitySet="Users" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="AptechkaRUModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Cart">
+          <Key>
+            <PropertyRef Name="cart_id" />
+          </Key>
+          <Property Name="cart_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="user_id" Type="Int32" Nullable="false" />
+          <Property Name="medicine_id" Type="Int32" Nullable="false" />
+          <Property Name="quantity" Type="Int32" Nullable="false" />
+          <Property Name="added_at" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Medicines" Relationship="Self.FK__Cart__medicine_i__534D60F1" FromRole="Cart" ToRole="Medicines" />
+          <NavigationProperty Name="Users" Relationship="Self.FK__Cart__user_id__52593CB8" FromRole="Cart" ToRole="Users" />
+        </EntityType>
+        <EntityType Name="Favorites">
+          <Key>
+            <PropertyRef Name="favorite_id" />
+          </Key>
+          <Property Name="favorite_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="user_id" Type="Int32" Nullable="false" />
+          <Property Name="medicine_id" Type="Int32" Nullable="false" />
+          <Property Name="added_at" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Medicines" Relationship="Self.FK__Favorites__medic__59063A47" FromRole="Favorites" ToRole="Medicines" />
+          <NavigationProperty Name="Users" Relationship="Self.FK__Favorites__user___5812160E" FromRole="Favorites" ToRole="Users" />
+        </EntityType>
+        <EntityType Name="KitMedicines">
+          <Key>
+            <PropertyRef Name="kit_medicine_id" />
+          </Key>
+          <Property Name="kit_medicine_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="kit_id" Type="Int32" Nullable="false" />
+          <Property Name="medicine_id" Type="Int32" Nullable="false" />
+          <Property Name="quantity" Type="Int32" Nullable="false" />
+          <Property Name="expiry_date" Type="DateTime" Precision="0" />
+          <Property Name="notes" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="UserMedicineKits" Relationship="Self.FK__KitMedici__kit_i__3D5E1FD2" FromRole="KitMedicines" ToRole="UserMedicineKits" />
+          <NavigationProperty Name="Medicines" Relationship="Self.FK__KitMedici__medic__3E52440B" FromRole="KitMedicines" ToRole="Medicines" />
+        </EntityType>
+        <EntityType Name="Manufacturers">
+          <Key>
+            <PropertyRef Name="manufacturer_id" />
+          </Key>
+          <Property Name="manufacturer_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="manufacturer_name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Medicines" Relationship="Self.FK__Medicines__manuf__34C8D9D1" FromRole="Manufacturers" ToRole="Medicines" />
+        </EntityType>
+        <EntityType Name="MedicineCategories">
+          <Key>
+            <PropertyRef Name="category_id" />
+          </Key>
+          <Property Name="category_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="description" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="parent_category_id" Type="Int32" />
+          <NavigationProperty Name="MedicineCategories1" Relationship="Self.FK__MedicineC__paren__29572725" FromRole="MedicineCategories" ToRole="MedicineCategories1" />
+          <NavigationProperty Name="MedicineCategories2" Relationship="Self.FK__MedicineC__paren__29572725" FromRole="MedicineCategories1" ToRole="MedicineCategories" />
+          <NavigationProperty Name="Medicines" Relationship="Self.FK__Medicines__categ__35BCFE0A" FromRole="MedicineCategories" ToRole="Medicines" />
+        </EntityType>
+        <EntityType Name="Medicines">
+          <Key>
+            <PropertyRef Name="medicine_id" />
+          </Key>
+          <Property Name="medicine_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="manufacturer_id" Type="Int32" Nullable="false" />
+          <Property Name="category_id" Type="Int32" Nullable="false" />
+          <Property Name="price" Type="Decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="requires_prescription" Type="Boolean" />
+          <Property Name="stock_quantity" Type="Int32" />
+          <Property Name="image_url" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Cart" Relationship="Self.FK__Cart__medicine_i__534D60F1" FromRole="Medicines" ToRole="Cart" />
+          <NavigationProperty Name="Favorites" Relationship="Self.FK__Favorites__medic__59063A47" FromRole="Medicines" ToRole="Favorites" />
+          <NavigationProperty Name="KitMedicines" Relationship="Self.FK__KitMedici__medic__3E52440B" FromRole="Medicines" ToRole="KitMedicines" />
+          <NavigationProperty Name="Manufacturers" Relationship="Self.FK__Medicines__manuf__34C8D9D1" FromRole="Medicines" ToRole="Manufacturers" />
+          <NavigationProperty Name="MedicineCategories" Relationship="Self.FK__Medicines__categ__35BCFE0A" FromRole="Medicines" ToRole="MedicineCategories" />
+          <NavigationProperty Name="PurchasedMedicines" Relationship="Self.FK__Purchased__medic__4CA06362" FromRole="Medicines" ToRole="PurchasedMedicines" />
+          <NavigationProperty Name="Reminders" Relationship="Self.FK__Reminders__medic__4316F928" FromRole="Medicines" ToRole="Reminders" />
+        </EntityType>
+        <EntityType Name="Pharmacies">
+          <Key>
+            <PropertyRef Name="pharmacy_id" />
+          </Key>
+          <Property Name="pharmacy_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="address" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="phone" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="working_hours" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="PurchaseHistory" Relationship="Self.FK__PurchaseH__pharm__48CFD27E" FromRole="Pharmacies" ToRole="PurchaseHistory" />
+        </EntityType>
+        <EntityType Name="PurchasedMedicines">
+          <Key>
+            <PropertyRef Name="purchased_medicine_id" />
+          </Key>
+          <Property Name="purchased_medicine_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="purchase_id" Type="Int32" Nullable="false" />
+          <Property Name="medicine_id" Type="Int32" Nullable="false" />
+          <Property Name="quantity" Type="Int32" Nullable="false" />
+          <Property Name="price_per_unit" Type="Decimal" Precision="10" Scale="2" Nullable="false" />
+          <NavigationProperty Name="Medicines" Relationship="Self.FK__Purchased__medic__4CA06362" FromRole="PurchasedMedicines" ToRole="Medicines" />
+          <NavigationProperty Name="PurchaseHistory" Relationship="Self.FK__Purchased__purch__4BAC3F29" FromRole="PurchasedMedicines" ToRole="PurchaseHistory" />
+        </EntityType>
+        <EntityType Name="PurchaseHistory">
+          <Key>
+            <PropertyRef Name="purchase_id" />
+          </Key>
+          <Property Name="purchase_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="user_id" Type="Int32" Nullable="false" />
+          <Property Name="pharmacy_id" Type="Int32" Nullable="false" />
+          <Property Name="purchase_date" Type="DateTime" Precision="3" />
+          <Property Name="total_amount" Type="Decimal" Precision="10" Scale="2" Nullable="false" />
+          <NavigationProperty Name="Pharmacies" Relationship="Self.FK__PurchaseH__pharm__48CFD27E" FromRole="PurchaseHistory" ToRole="Pharmacies" />
+          <NavigationProperty Name="PurchasedMedicines" Relationship="Self.FK__Purchased__purch__4BAC3F29" FromRole="PurchaseHistory" ToRole="PurchasedMedicines" />
+          <NavigationProperty Name="Users" Relationship="Self.FK__PurchaseH__user___47DBAE45" FromRole="PurchaseHistory" ToRole="Users" />
+        </EntityType>
+        <EntityType Name="Reminders">
+          <Key>
+            <PropertyRef Name="reminder_id" />
+          </Key>
+          <Property Name="reminder_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="user_id" Type="Int32" Nullable="false" />
+          <Property Name="medicine_id" Type="Int32" Nullable="false" />
+          <Property Name="kit_id" Type="Int32" />
+          <Property Name="dosage" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="frequency" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="start_date" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="end_date" Type="DateTime" Precision="0" />
+          <Property Name="is_active" Type="Boolean" />
+          <NavigationProperty Name="Medicines" Relationship="Self.FK__Reminders__medic__4316F928" FromRole="Reminders" ToRole="Medicines" />
+          <NavigationProperty Name="UserMedicineKits" Relationship="Self.FK__Reminders__kit_i__440B1D61" FromRole="Reminders" ToRole="UserMedicineKits" />
+          <NavigationProperty Name="Users" Relationship="Self.FK__Reminders__user___4222D4EF" FromRole="Reminders" ToRole="Users" />
+        </EntityType>
+        <EntityType Name="Roles">
+          <Key>
+            <PropertyRef Name="role_id" />
+          </Key>
+          <Property Name="role_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="role_name" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Users" Relationship="Self.FK__Users__role_id__300424B4" FromRole="Roles" ToRole="Users" />
+        </EntityType>
+        <EntityType Name="UserMedicineKits">
+          <Key>
+            <PropertyRef Name="kit_id" />
+          </Key>
+          <Property Name="kit_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="user_id" Type="Int32" Nullable="false" />
+          <Property Name="name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="description" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="created_at" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="KitMedicines" Relationship="Self.FK__KitMedici__kit_i__3D5E1FD2" FromRole="UserMedicineKits" ToRole="KitMedicines" />
+          <NavigationProperty Name="Reminders" Relationship="Self.FK__Reminders__kit_i__440B1D61" FromRole="UserMedicineKits" ToRole="Reminders" />
+          <NavigationProperty Name="Users" Relationship="Self.FK__UserMedic__user___398D8EEE" FromRole="UserMedicineKits" ToRole="Users" />
+        </EntityType>
+        <EntityType Name="Users">
+          <Key>
+            <PropertyRef Name="user_id" />
+          </Key>
+          <Property Name="user_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="login" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="email" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="password" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="first_name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="middle_name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="last_name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="phone" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="role_id" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Cart" Relationship="Self.FK__Cart__user_id__52593CB8" FromRole="Users" ToRole="Cart" />
+          <NavigationProperty Name="Favorites" Relationship="Self.FK__Favorites__user___5812160E" FromRole="Users" ToRole="Favorites" />
+          <NavigationProperty Name="PurchaseHistory" Relationship="Self.FK__PurchaseH__user___47DBAE45" FromRole="Users" ToRole="PurchaseHistory" />
+          <NavigationProperty Name="Reminders" Relationship="Self.FK__Reminders__user___4222D4EF" FromRole="Users" ToRole="Reminders" />
+          <NavigationProperty Name="Roles" Relationship="Self.FK__Users__role_id__300424B4" FromRole="Users" ToRole="Roles" />
+          <NavigationProperty Name="UserMedicineKits" Relationship="Self.FK__UserMedic__user___398D8EEE" FromRole="Users" ToRole="UserMedicineKits" />
+        </EntityType>
+        <Association Name="FK__Cart__medicine_i__534D60F1">
+          <End Role="Medicines" Type="Self.Medicines" Multiplicity="1" />
+          <End Role="Cart" Type="Self.Cart" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Medicines">
+              <PropertyRef Name="medicine_id" />
+            </Principal>
+            <Dependent Role="Cart">
+              <PropertyRef Name="medicine_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Cart__user_id__52593CB8">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="Cart" Type="Self.Cart" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="user_id" />
+            </Principal>
+            <Dependent Role="Cart">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Favorites__medic__59063A47">
+          <End Role="Medicines" Type="Self.Medicines" Multiplicity="1" />
+          <End Role="Favorites" Type="Self.Favorites" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Medicines">
+              <PropertyRef Name="medicine_id" />
+            </Principal>
+            <Dependent Role="Favorites">
+              <PropertyRef Name="medicine_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Favorites__user___5812160E">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="Favorites" Type="Self.Favorites" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="user_id" />
+            </Principal>
+            <Dependent Role="Favorites">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__KitMedici__kit_i__3D5E1FD2">
+          <End Role="UserMedicineKits" Type="Self.UserMedicineKits" Multiplicity="1" />
+          <End Role="KitMedicines" Type="Self.KitMedicines" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserMedicineKits">
+              <PropertyRef Name="kit_id" />
+            </Principal>
+            <Dependent Role="KitMedicines">
+              <PropertyRef Name="kit_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__KitMedici__medic__3E52440B">
+          <End Role="Medicines" Type="Self.Medicines" Multiplicity="1" />
+          <End Role="KitMedicines" Type="Self.KitMedicines" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Medicines">
+              <PropertyRef Name="medicine_id" />
+            </Principal>
+            <Dependent Role="KitMedicines">
+              <PropertyRef Name="medicine_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Medicines__manuf__34C8D9D1">
+          <End Role="Manufacturers" Type="Self.Manufacturers" Multiplicity="1" />
+          <End Role="Medicines" Type="Self.Medicines" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Manufacturers">
+              <PropertyRef Name="manufacturer_id" />
+            </Principal>
+            <Dependent Role="Medicines">
+              <PropertyRef Name="manufacturer_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__MedicineC__paren__29572725">
+          <End Role="MedicineCategories" Type="Self.MedicineCategories" Multiplicity="0..1" />
+          <End Role="MedicineCategories1" Type="Self.MedicineCategories" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MedicineCategories">
+              <PropertyRef Name="category_id" />
+            </Principal>
+            <Dependent Role="MedicineCategories1">
+              <PropertyRef Name="parent_category_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Medicines__categ__35BCFE0A">
+          <End Role="MedicineCategories" Type="Self.MedicineCategories" Multiplicity="1" />
+          <End Role="Medicines" Type="Self.Medicines" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MedicineCategories">
+              <PropertyRef Name="category_id" />
+            </Principal>
+            <Dependent Role="Medicines">
+              <PropertyRef Name="category_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Purchased__medic__4CA06362">
+          <End Role="Medicines" Type="Self.Medicines" Multiplicity="1" />
+          <End Role="PurchasedMedicines" Type="Self.PurchasedMedicines" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Medicines">
+              <PropertyRef Name="medicine_id" />
+            </Principal>
+            <Dependent Role="PurchasedMedicines">
+              <PropertyRef Name="medicine_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Reminders__medic__4316F928">
+          <End Role="Medicines" Type="Self.Medicines" Multiplicity="1" />
+          <End Role="Reminders" Type="Self.Reminders" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Medicines">
+              <PropertyRef Name="medicine_id" />
+            </Principal>
+            <Dependent Role="Reminders">
+              <PropertyRef Name="medicine_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__PurchaseH__pharm__48CFD27E">
+          <End Role="Pharmacies" Type="Self.Pharmacies" Multiplicity="1" />
+          <End Role="PurchaseHistory" Type="Self.PurchaseHistory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Pharmacies">
+              <PropertyRef Name="pharmacy_id" />
+            </Principal>
+            <Dependent Role="PurchaseHistory">
+              <PropertyRef Name="pharmacy_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Purchased__purch__4BAC3F29">
+          <End Role="PurchaseHistory" Type="Self.PurchaseHistory" Multiplicity="1" />
+          <End Role="PurchasedMedicines" Type="Self.PurchasedMedicines" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PurchaseHistory">
+              <PropertyRef Name="purchase_id" />
+            </Principal>
+            <Dependent Role="PurchasedMedicines">
+              <PropertyRef Name="purchase_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__PurchaseH__user___47DBAE45">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="PurchaseHistory" Type="Self.PurchaseHistory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="user_id" />
+            </Principal>
+            <Dependent Role="PurchaseHistory">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Reminders__kit_i__440B1D61">
+          <End Role="UserMedicineKits" Type="Self.UserMedicineKits" Multiplicity="0..1" />
+          <End Role="Reminders" Type="Self.Reminders" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserMedicineKits">
+              <PropertyRef Name="kit_id" />
+            </Principal>
+            <Dependent Role="Reminders">
+              <PropertyRef Name="kit_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Reminders__user___4222D4EF">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="Reminders" Type="Self.Reminders" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="user_id" />
+            </Principal>
+            <Dependent Role="Reminders">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Users__role_id__300424B4">
+          <End Role="Roles" Type="Self.Roles" Multiplicity="1" />
+          <End Role="Users" Type="Self.Users" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Roles">
+              <PropertyRef Name="role_id" />
+            </Principal>
+            <Dependent Role="Users">
+              <PropertyRef Name="role_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__UserMedic__user___398D8EEE">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="UserMedicineKits" Type="Self.UserMedicineKits" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="user_id" />
+            </Principal>
+            <Dependent Role="UserMedicineKits">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="AptechkaRUEntities1" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Cart" EntityType="Self.Cart" />
+          <EntitySet Name="Favorites" EntityType="Self.Favorites" />
+          <EntitySet Name="KitMedicines" EntityType="Self.KitMedicines" />
+          <EntitySet Name="Manufacturers" EntityType="Self.Manufacturers" />
+          <EntitySet Name="MedicineCategories" EntityType="Self.MedicineCategories" />
+          <EntitySet Name="Medicines" EntityType="Self.Medicines" />
+          <EntitySet Name="Pharmacies" EntityType="Self.Pharmacies" />
+          <EntitySet Name="PurchasedMedicines" EntityType="Self.PurchasedMedicines" />
+          <EntitySet Name="PurchaseHistory" EntityType="Self.PurchaseHistory" />
+          <EntitySet Name="Reminders" EntityType="Self.Reminders" />
+          <EntitySet Name="Roles" EntityType="Self.Roles" />
+          <EntitySet Name="UserMedicineKits" EntityType="Self.UserMedicineKits" />
+          <EntitySet Name="Users" EntityType="Self.Users" />
+          <AssociationSet Name="FK__Cart__medicine_i__534D60F1" Association="Self.FK__Cart__medicine_i__534D60F1">
+            <End Role="Medicines" EntitySet="Medicines" />
+            <End Role="Cart" EntitySet="Cart" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Cart__user_id__52593CB8" Association="Self.FK__Cart__user_id__52593CB8">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Cart" EntitySet="Cart" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Favorites__medic__59063A47" Association="Self.FK__Favorites__medic__59063A47">
+            <End Role="Medicines" EntitySet="Medicines" />
+            <End Role="Favorites" EntitySet="Favorites" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Favorites__user___5812160E" Association="Self.FK__Favorites__user___5812160E">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Favorites" EntitySet="Favorites" />
+          </AssociationSet>
+          <AssociationSet Name="FK__KitMedici__kit_i__3D5E1FD2" Association="Self.FK__KitMedici__kit_i__3D5E1FD2">
+            <End Role="UserMedicineKits" EntitySet="UserMedicineKits" />
+            <End Role="KitMedicines" EntitySet="KitMedicines" />
+          </AssociationSet>
+          <AssociationSet Name="FK__KitMedici__medic__3E52440B" Association="Self.FK__KitMedici__medic__3E52440B">
+            <End Role="Medicines" EntitySet="Medicines" />
+            <End Role="KitMedicines" EntitySet="KitMedicines" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Medicines__manuf__34C8D9D1" Association="Self.FK__Medicines__manuf__34C8D9D1">
+            <End Role="Manufacturers" EntitySet="Manufacturers" />
+            <End Role="Medicines" EntitySet="Medicines" />
+          </AssociationSet>
+          <AssociationSet Name="FK__MedicineC__paren__29572725" Association="Self.FK__MedicineC__paren__29572725">
+            <End Role="MedicineCategories" EntitySet="MedicineCategories" />
+            <End Role="MedicineCategories1" EntitySet="MedicineCategories" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Medicines__categ__35BCFE0A" Association="Self.FK__Medicines__categ__35BCFE0A">
+            <End Role="MedicineCategories" EntitySet="MedicineCategories" />
+            <End Role="Medicines" EntitySet="Medicines" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Purchased__medic__4CA06362" Association="Self.FK__Purchased__medic__4CA06362">
+            <End Role="Medicines" EntitySet="Medicines" />
+            <End Role="PurchasedMedicines" EntitySet="PurchasedMedicines" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Reminders__medic__4316F928" Association="Self.FK__Reminders__medic__4316F928">
+            <End Role="Medicines" EntitySet="Medicines" />
+            <End Role="Reminders" EntitySet="Reminders" />
+          </AssociationSet>
+          <AssociationSet Name="FK__PurchaseH__pharm__48CFD27E" Association="Self.FK__PurchaseH__pharm__48CFD27E">
+            <End Role="Pharmacies" EntitySet="Pharmacies" />
+            <End Role="PurchaseHistory" EntitySet="PurchaseHistory" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Purchased__purch__4BAC3F29" Association="Self.FK__Purchased__purch__4BAC3F29">
+            <End Role="PurchaseHistory" EntitySet="PurchaseHistory" />
+            <End Role="PurchasedMedicines" EntitySet="PurchasedMedicines" />
+          </AssociationSet>
+          <AssociationSet Name="FK__PurchaseH__user___47DBAE45" Association="Self.FK__PurchaseH__user___47DBAE45">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="PurchaseHistory" EntitySet="PurchaseHistory" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Reminders__kit_i__440B1D61" Association="Self.FK__Reminders__kit_i__440B1D61">
+            <End Role="UserMedicineKits" EntitySet="UserMedicineKits" />
+            <End Role="Reminders" EntitySet="Reminders" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Reminders__user___4222D4EF" Association="Self.FK__Reminders__user___4222D4EF">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Reminders" EntitySet="Reminders" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Users__role_id__300424B4" Association="Self.FK__Users__role_id__300424B4">
+            <End Role="Roles" EntitySet="Roles" />
+            <End Role="Users" EntitySet="Users" />
+          </AssociationSet>
+          <AssociationSet Name="FK__UserMedic__user___398D8EEE" Association="Self.FK__UserMedic__user___398D8EEE">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="UserMedicineKits" EntitySet="UserMedicineKits" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Хранилище AptechkaRUModelContainer" CdmEntityContainer="AptechkaRUEntities1">
+          <EntitySetMapping Name="Cart">
+            <EntityTypeMapping TypeName="AptechkaRUModel.Cart">
+              <MappingFragment StoreEntitySet="Cart">
+                <ScalarProperty Name="cart_id" ColumnName="cart_id" />
+                <ScalarProperty Name="user_id" ColumnName="user_id" />
+                <ScalarProperty Name="medicine_id" ColumnName="medicine_id" />
+                <ScalarProperty Name="quantity" ColumnName="quantity" />
+                <ScalarProperty Name="added_at" ColumnName="added_at" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Favorites">
+            <EntityTypeMapping TypeName="AptechkaRUModel.Favorites">
+              <MappingFragment StoreEntitySet="Favorites">
+                <ScalarProperty Name="favorite_id" ColumnName="favorite_id" />
+                <ScalarProperty Name="user_id" ColumnName="user_id" />
+                <ScalarProperty Name="medicine_id" ColumnName="medicine_id" />
+                <ScalarProperty Name="added_at" ColumnName="added_at" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="KitMedicines">
+            <EntityTypeMapping TypeName="AptechkaRUModel.KitMedicines">
+              <MappingFragment StoreEntitySet="KitMedicines">
+                <ScalarProperty Name="kit_medicine_id" ColumnName="kit_medicine_id" />
+                <ScalarProperty Name="kit_id" ColumnName="kit_id" />
+                <ScalarProperty Name="medicine_id" ColumnName="medicine_id" />
+                <ScalarProperty Name="quantity" ColumnName="quantity" />
+                <ScalarProperty Name="expiry_date" ColumnName="expiry_date" />
+                <ScalarProperty Name="notes" ColumnName="notes" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Manufacturers">
+            <EntityTypeMapping TypeName="AptechkaRUModel.Manufacturers">
+              <MappingFragment StoreEntitySet="Manufacturers">
+                <ScalarProperty Name="manufacturer_id" ColumnName="manufacturer_id" />
+                <ScalarProperty Name="manufacturer_name" ColumnName="manufacturer_name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MedicineCategories">
+            <EntityTypeMapping TypeName="AptechkaRUModel.MedicineCategories">
+              <MappingFragment StoreEntitySet="MedicineCategories">
+                <ScalarProperty Name="category_id" ColumnName="category_id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="parent_category_id" ColumnName="parent_category_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Medicines">
+            <EntityTypeMapping TypeName="AptechkaRUModel.Medicines">
+              <MappingFragment StoreEntitySet="Medicines">
+                <ScalarProperty Name="medicine_id" ColumnName="medicine_id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="manufacturer_id" ColumnName="manufacturer_id" />
+                <ScalarProperty Name="category_id" ColumnName="category_id" />
+                <ScalarProperty Name="price" ColumnName="price" />
+                <ScalarProperty Name="requires_prescription" ColumnName="requires_prescription" />
+                <ScalarProperty Name="stock_quantity" ColumnName="stock_quantity" />
+                <ScalarProperty Name="image_url" ColumnName="image_url" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Pharmacies">
+            <EntityTypeMapping TypeName="AptechkaRUModel.Pharmacies">
+              <MappingFragment StoreEntitySet="Pharmacies">
+                <ScalarProperty Name="pharmacy_id" ColumnName="pharmacy_id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="address" ColumnName="address" />
+                <ScalarProperty Name="phone" ColumnName="phone" />
+                <ScalarProperty Name="working_hours" ColumnName="working_hours" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PurchasedMedicines">
+            <EntityTypeMapping TypeName="AptechkaRUModel.PurchasedMedicines">
+              <MappingFragment StoreEntitySet="PurchasedMedicines">
+                <ScalarProperty Name="purchased_medicine_id" ColumnName="purchased_medicine_id" />
+                <ScalarProperty Name="purchase_id" ColumnName="purchase_id" />
+                <ScalarProperty Name="medicine_id" ColumnName="medicine_id" />
+                <ScalarProperty Name="quantity" ColumnName="quantity" />
+                <ScalarProperty Name="price_per_unit" ColumnName="price_per_unit" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PurchaseHistory">
+            <EntityTypeMapping TypeName="AptechkaRUModel.PurchaseHistory">
+              <MappingFragment StoreEntitySet="PurchaseHistory">
+                <ScalarProperty Name="purchase_id" ColumnName="purchase_id" />
+                <ScalarProperty Name="user_id" ColumnName="user_id" />
+                <ScalarProperty Name="pharmacy_id" ColumnName="pharmacy_id" />
+                <ScalarProperty Name="purchase_date" ColumnName="purchase_date" />
+                <ScalarProperty Name="total_amount" ColumnName="total_amount" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Reminders">
+            <EntityTypeMapping TypeName="AptechkaRUModel.Reminders">
+              <MappingFragment StoreEntitySet="Reminders">
+                <ScalarProperty Name="reminder_id" ColumnName="reminder_id" />
+                <ScalarProperty Name="user_id" ColumnName="user_id" />
+                <ScalarProperty Name="medicine_id" ColumnName="medicine_id" />
+                <ScalarProperty Name="kit_id" ColumnName="kit_id" />
+                <ScalarProperty Name="dosage" ColumnName="dosage" />
+                <ScalarProperty Name="frequency" ColumnName="frequency" />
+                <ScalarProperty Name="start_date" ColumnName="start_date" />
+                <ScalarProperty Name="end_date" ColumnName="end_date" />
+                <ScalarProperty Name="is_active" ColumnName="is_active" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Roles">
+            <EntityTypeMapping TypeName="AptechkaRUModel.Roles">
+              <MappingFragment StoreEntitySet="Roles">
+                <ScalarProperty Name="role_id" ColumnName="role_id" />
+                <ScalarProperty Name="role_name" ColumnName="role_name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserMedicineKits">
+            <EntityTypeMapping TypeName="AptechkaRUModel.UserMedicineKits">
+              <MappingFragment StoreEntitySet="UserMedicineKits">
+                <ScalarProperty Name="kit_id" ColumnName="kit_id" />
+                <ScalarProperty Name="user_id" ColumnName="user_id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="created_at" ColumnName="created_at" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="AptechkaRUModel.Users">
+              <MappingFragment StoreEntitySet="Users">
+                <ScalarProperty Name="user_id" ColumnName="user_id" />
+                <ScalarProperty Name="login" ColumnName="login" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="password" ColumnName="password" />
+                <ScalarProperty Name="first_name" ColumnName="first_name" />
+                <ScalarProperty Name="middle_name" ColumnName="middle_name" />
+                <ScalarProperty Name="last_name" ColumnName="last_name" />
+                <ScalarProperty Name="phone" ColumnName="phone" />
+                <ScalarProperty Name="role_id" ColumnName="role_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Нет" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
