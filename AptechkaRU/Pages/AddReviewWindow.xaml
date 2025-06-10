@@ -1,0 +1,18 @@
+﻿<Window x:Class="AptechkaRU.Pages.AddReviewWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:AptechkaRU.Pages"
+        mc:Ignorable="d" Background="#E0F7F7"
+        Title="AddReviewWindow" Height="450" Width="800">
+    <StackPanel Margin="20">
+        <TextBlock Text="Оценка (1-5):" Foreground="#007979" FontWeight="Bold"/>
+        <TextBox x:Name="RatingTextBox" Width="50"/>
+
+        <TextBlock Text="Комментарий:" Margin="0,10,0,0" Foreground="#007979" FontWeight="Bold"/>
+        <TextBox x:Name="CommentTextBox" Height="100" TextWrapping="Wrap" AcceptsReturn="True"/>
+
+        <Button Content="Отправить" Margin="0,10,0,0" Click="SubmitButton_Click" Background="#007979" Foreground="White" FontWeight="Bold"/>
+    </StackPanel>
+</Window>

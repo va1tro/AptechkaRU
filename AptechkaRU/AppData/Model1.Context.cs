@@ -38,5 +38,7 @@ namespace AptechkaRU.AppData
         public virtual DbSet<Roles> Roles { get; set; }
         public virtual DbSet<UserMedicineKits> UserMedicineKits { get; set; }
         public virtual DbSet<Users> Users { get; set; }
+        public virtual DbSet<Countries> Countries { get; set; }
+        public virtual DbSet<MedicineReviews> MedicineReviews { get; set; }
     }
 }

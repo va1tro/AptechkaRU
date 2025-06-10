@@ -92,6 +92,7 @@
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                                 <Button Content="🛒" Margin="5" Click="AddToCart_Click" Background="#82B5A9" Foreground="White" Width="40" Height="30" BorderThickness="0" Cursor="Hand"/>
                                 <Button Content="★" Margin="5" Click="AddToFavorites_Click" Background="#82B5A9" Foreground="White" Width="40" Height="30" BorderThickness="0" Cursor="Hand"/>
+                                <Button Content="Отзывы" Margin="5" Click="ReviewsButton_Click" Background="#82B5A9" Foreground="White" Width="50" Height="30" BorderThickness="0" Cursor="Hand" Tag="{Binding medicine_id}" />
                             </StackPanel>
                         </StackPanel>
                     </Border>

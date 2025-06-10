@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="Хранилище AptechkaRUModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="Хранилище AptechkaRUModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Cart">
           <Key>
             <PropertyRef Name="cart_id" />
@@ -14,6 +14,14 @@
           <Property Name="medicine_id" Type="int" Nullable="false" />
           <Property Name="quantity" Type="int" Nullable="false" />
           <Property Name="added_at" Type="datetime" />
+        </EntityType>
+        <EntityType Name="Countries">
+          <Key>
+            <PropertyRef Name="country_id" />
+          </Key>
+          <Property Name="country_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="country_name" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="country_code" Type="nvarchar" MaxLength="10" />
         </EntityType>
         <EntityType Name="Favorites">
           <Key>
@@ -51,6 +59,18 @@
           <Property Name="description" Type="nvarchar" MaxLength="255" />
           <Property Name="parent_category_id" Type="int" />
         </EntityType>
+        <EntityType Name="MedicineReviews">
+          <Key>
+            <PropertyRef Name="review_id" />
+          </Key>
+          <Property Name="review_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="user_id" Type="int" Nullable="false" />
+          <Property Name="medicine_id" Type="int" Nullable="false" />
+          <Property Name="rating" Type="int" Nullable="false" />
+          <Property Name="comment" Type="nvarchar(max)" />
+          <Property Name="review_date" Type="datetime" Nullable="false" />
+          <Property Name="is_approved" Type="bit" Nullable="false" />
+        </EntityType>
         <EntityType Name="Medicines">
           <Key>
             <PropertyRef Name="medicine_id" />
@@ -64,6 +84,7 @@
           <Property Name="requires_prescription" Type="bit" />
           <Property Name="stock_quantity" Type="int" />
           <Property Name="image_url" Type="nvarchar" MaxLength="255" />
+          <Property Name="country_id" Type="int" />
         </EntityType>
         <EntityType Name="Pharmacies">
           <Key>
@@ -224,6 +245,30 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK__MedicineR__medic__60A75C0F">
+          <End Role="Medicines" Type="Self.Medicines" Multiplicity="1" />
+          <End Role="MedicineReviews" Type="Self.MedicineReviews" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Medicines">
+              <PropertyRef Name="medicine_id" />
+            </Principal>
+            <Dependent Role="MedicineReviews">
+              <PropertyRef Name="medicine_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__MedicineR__user___5FB337D6">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="MedicineReviews" Type="Self.MedicineReviews" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="user_id" />
+            </Principal>
+            <Dependent Role="MedicineReviews">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK__Medicines__categ__35BCFE0A">
           <End Role="MedicineCategories" Type="Self.MedicineCategories" Multiplicity="1" />
           <End Role="Medicines" Type="Self.Medicines" Multiplicity="*" />
@@ -356,12 +401,26 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Medicines_Countries">
+          <End Role="Countries" Type="Self.Countries" Multiplicity="0..1" />
+          <End Role="Medicines" Type="Self.Medicines" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Countries">
+              <PropertyRef Name="country_id" />
+            </Principal>
+            <Dependent Role="Medicines">
+              <PropertyRef Name="country_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="Хранилище AptechkaRUModelContainer">
           <EntitySet Name="Cart" EntityType="Self.Cart" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Countries" EntityType="Self.Countries" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Favorites" EntityType="Self.Favorites" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="KitMedicines" EntityType="Self.KitMedicines" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Manufacturers" EntityType="Self.Manufacturers" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MedicineCategories" EntityType="Self.MedicineCategories" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MedicineReviews" EntityType="Self.MedicineReviews" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Medicines" EntityType="Self.Medicines" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Pharmacies" EntityType="Self.Pharmacies" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PurchasedMedicines" EntityType="Self.PurchasedMedicines" Schema="dbo" store:Type="Tables" />
@@ -397,6 +456,14 @@
           <AssociationSet Name="FK__MedicineC__paren__29572725" Association="Self.FK__MedicineC__paren__29572725">
             <End Role="MedicineCategories" EntitySet="MedicineCategories" />
             <End Role="MedicineCategories1" EntitySet="MedicineCategories" />
+          </AssociationSet>
+          <AssociationSet Name="FK__MedicineR__medic__60A75C0F" Association="Self.FK__MedicineR__medic__60A75C0F">
+            <End Role="Medicines" EntitySet="Medicines" />
+            <End Role="MedicineReviews" EntitySet="MedicineReviews" />
+          </AssociationSet>
+          <AssociationSet Name="FK__MedicineR__user___5FB337D6" Association="Self.FK__MedicineR__user___5FB337D6">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="MedicineReviews" EntitySet="MedicineReviews" />
           </AssociationSet>
           <AssociationSet Name="FK__Medicines__categ__35BCFE0A" Association="Self.FK__Medicines__categ__35BCFE0A">
             <End Role="MedicineCategories" EntitySet="MedicineCategories" />
@@ -442,9 +509,12 @@
             <End Role="Roles" EntitySet="Roles" />
             <End Role="Users" EntitySet="Users" />
           </AssociationSet>
+          <AssociationSet Name="FK_Medicines_Countries" Association="Self.FK_Medicines_Countries">
+            <End Role="Countries" EntitySet="Countries" />
+            <End Role="Medicines" EntitySet="Medicines" />
+          </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="AptechkaRUModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -524,6 +594,9 @@
           <NavigationProperty Name="MedicineCategories" Relationship="Self.FK__Medicines__categ__35BCFE0A" FromRole="Medicines" ToRole="MedicineCategories" />
           <NavigationProperty Name="PurchasedMedicines" Relationship="Self.FK__Purchased__medic__4CA06362" FromRole="Medicines" ToRole="PurchasedMedicines" />
           <NavigationProperty Name="Reminders" Relationship="Self.FK__Reminders__medic__4316F928" FromRole="Medicines" ToRole="Reminders" />
+          <Property Name="country_id" Type="Int32" />
+          <NavigationProperty Name="Countries" Relationship="AptechkaRUModel.FK_Medicines_Countries" FromRole="Medicines" ToRole="Countries" />
+          <NavigationProperty Name="MedicineReviews" Relationship="AptechkaRUModel.FK__MedicineR__medic__60A75C0F" FromRole="Medicines" ToRole="MedicineReviews" />
         </EntityType>
         <EntityType Name="Pharmacies">
           <Key>
@@ -618,6 +691,7 @@
           <NavigationProperty Name="Reminders" Relationship="Self.FK__Reminders__user___4222D4EF" FromRole="Users" ToRole="Reminders" />
           <NavigationProperty Name="Roles" Relationship="Self.FK__Users__role_id__300424B4" FromRole="Users" ToRole="Roles" />
           <NavigationProperty Name="UserMedicineKits" Relationship="Self.FK__UserMedic__user___398D8EEE" FromRole="Users" ToRole="UserMedicineKits" />
+          <NavigationProperty Name="MedicineReviews" Relationship="AptechkaRUModel.FK__MedicineR__user___5FB337D6" FromRole="Users" ToRole="MedicineReviews" />
         </EntityType>
         <Association Name="FK__Cart__medicine_i__534D60F1">
           <End Role="Medicines" Type="Self.Medicines" Multiplicity="1" />
@@ -921,7 +995,80 @@
             <End Role="Users" EntitySet="Users" />
             <End Role="UserMedicineKits" EntitySet="UserMedicineKits" />
           </AssociationSet>
+          <EntitySet Name="Countries" EntityType="AptechkaRUModel.Countries" />
+          <EntitySet Name="MedicineReviews" EntityType="AptechkaRUModel.MedicineReviews" />
+          <AssociationSet Name="FK_Medicines_Countries" Association="AptechkaRUModel.FK_Medicines_Countries">
+            <End Role="Countries" EntitySet="Countries" />
+            <End Role="Medicines" EntitySet="Medicines" />
+          </AssociationSet>
+          <AssociationSet Name="FK__MedicineR__medic__60A75C0F" Association="AptechkaRUModel.FK__MedicineR__medic__60A75C0F">
+            <End Role="Medicines" EntitySet="Medicines" />
+            <End Role="MedicineReviews" EntitySet="MedicineReviews" />
+          </AssociationSet>
+          <AssociationSet Name="FK__MedicineR__user___5FB337D6" Association="AptechkaRUModel.FK__MedicineR__user___5FB337D6">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="MedicineReviews" EntitySet="MedicineReviews" />
+          </AssociationSet>
         </EntityContainer>
+        <EntityType Name="Countries">
+          <Key>
+            <PropertyRef Name="country_id" />
+          </Key>
+          <Property Name="country_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="country_name" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="country_code" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Medicines" Relationship="AptechkaRUModel.FK_Medicines_Countries" FromRole="Countries" ToRole="Medicines" />
+        </EntityType>
+        <EntityType Name="MedicineReviews">
+          <Key>
+            <PropertyRef Name="review_id" />
+          </Key>
+          <Property Name="review_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="user_id" Type="Int32" Nullable="false" />
+          <Property Name="medicine_id" Type="Int32" Nullable="false" />
+          <Property Name="rating" Type="Int32" Nullable="false" />
+          <Property Name="comment" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="review_date" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="is_approved" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Medicines" Relationship="AptechkaRUModel.FK__MedicineR__medic__60A75C0F" FromRole="MedicineReviews" ToRole="Medicines" />
+          <NavigationProperty Name="Users" Relationship="AptechkaRUModel.FK__MedicineR__user___5FB337D6" FromRole="MedicineReviews" ToRole="Users" />
+        </EntityType>
+        <Association Name="FK_Medicines_Countries">
+          <End Type="AptechkaRUModel.Countries" Role="Countries" Multiplicity="0..1" />
+          <End Type="AptechkaRUModel.Medicines" Role="Medicines" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Countries">
+              <PropertyRef Name="country_id" />
+            </Principal>
+            <Dependent Role="Medicines">
+              <PropertyRef Name="country_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__MedicineR__medic__60A75C0F">
+          <End Type="AptechkaRUModel.Medicines" Role="Medicines" Multiplicity="1" />
+          <End Type="AptechkaRUModel.MedicineReviews" Role="MedicineReviews" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Medicines">
+              <PropertyRef Name="medicine_id" />
+            </Principal>
+            <Dependent Role="MedicineReviews">
+              <PropertyRef Name="medicine_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__MedicineR__user___5FB337D6">
+          <End Type="AptechkaRUModel.Users" Role="Users" Multiplicity="1" />
+          <End Type="AptechkaRUModel.MedicineReviews" Role="MedicineReviews" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="user_id" />
+            </Principal>
+            <Dependent Role="MedicineReviews">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -982,6 +1129,7 @@
           <EntitySetMapping Name="Medicines">
             <EntityTypeMapping TypeName="AptechkaRUModel.Medicines">
               <MappingFragment StoreEntitySet="Medicines">
+                <ScalarProperty Name="country_id" ColumnName="country_id" />
                 <ScalarProperty Name="medicine_id" ColumnName="medicine_id" />
                 <ScalarProperty Name="name" ColumnName="name" />
                 <ScalarProperty Name="description" ColumnName="description" />
@@ -1073,6 +1221,28 @@
                 <ScalarProperty Name="last_name" ColumnName="last_name" />
                 <ScalarProperty Name="phone" ColumnName="phone" />
                 <ScalarProperty Name="role_id" ColumnName="role_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Countries">
+            <EntityTypeMapping TypeName="AptechkaRUModel.Countries">
+              <MappingFragment StoreEntitySet="Countries">
+                <ScalarProperty Name="country_code" ColumnName="country_code" />
+                <ScalarProperty Name="country_name" ColumnName="country_name" />
+                <ScalarProperty Name="country_id" ColumnName="country_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MedicineReviews">
+            <EntityTypeMapping TypeName="AptechkaRUModel.MedicineReviews">
+              <MappingFragment StoreEntitySet="MedicineReviews">
+                <ScalarProperty Name="is_approved" ColumnName="is_approved" />
+                <ScalarProperty Name="review_date" ColumnName="review_date" />
+                <ScalarProperty Name="comment" ColumnName="comment" />
+                <ScalarProperty Name="rating" ColumnName="rating" />
+                <ScalarProperty Name="medicine_id" ColumnName="medicine_id" />
+                <ScalarProperty Name="user_id" ColumnName="user_id" />
+                <ScalarProperty Name="review_id" ColumnName="review_id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

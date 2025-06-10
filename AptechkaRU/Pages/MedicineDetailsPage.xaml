@@ -21,6 +21,9 @@
 
                     <TextBlock Text="Производитель:" FontWeight="Bold" FontSize="16" Foreground="#007979"/>
                     <TextBlock Text="{Binding Manufacturers.manufacturer_name}" Margin="0,0,0,10"/>
+                    
+                    <TextBlock Text="Страна производства:" FontWeight="Bold"/>
+                    <TextBlock Text="{Binding Countries.country_name}" Margin="0,0,0,10"/>
 
                     <TextBlock Text="Категория:" FontWeight="Bold" FontSize="16" Foreground="#007979"/>
                     <TextBlock Text="{Binding MedicineCategories.name}" Margin="0,0,0,10"/>

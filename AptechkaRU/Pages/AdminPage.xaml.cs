@@ -1,6 +1,8 @@
 ﻿using AptechkaRU.AppData;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,150 +23,116 @@ namespace AptechkaRU.Pages
     /// </summary>
     public partial class AdminPage : Page
     {
-        List<Medicines> medicines;
+        private AptechkaRUEntities1 context = new AptechkaRUEntities1();
+        private List<Medicines> allMedicines;
 
         public AdminPage()
         {
             InitializeComponent();
             LoadData();
-            SetupFilters();
         }
 
         private void LoadData()
         {
-            medicines = AppConnect.model0db.Medicines.ToList();
-            DisplayMedicines(medicines);
+            allMedicines = context.Medicines.Include("Countries").ToList();
+            UpdateList();
         }
 
-        private void DisplayMedicines(List<Medicines> list)
+        private void UpdateList()
         {
-            MedicineWrapPanel.Children.Clear();
+            var filtered = allMedicines.Where(m => string.IsNullOrWhiteSpace(TextSearch.Text) ||
+                                                   m.name.ToLower().Contains(TextSearch.Text.ToLower())).ToList();
 
-            foreach (var med in list)
+            switch ((ComboSort.SelectedItem as ComboBoxItem)?.Content.ToString())
             {
-                var border = new Border
-                {
-                    Width = 200,
-                    Margin = new Thickness(10),
-                    Padding = new Thickness(10),
-                    Background = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.White),
-                    BorderBrush = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.LightGray),
-                    BorderThickness = new Thickness(1),
-                    CornerRadius = new CornerRadius(10)
-                };
+                case "По алфавиту":
+                    filtered = filtered.OrderBy(m => m.name).ToList(); break;
+                case "По цене (по возрастанию)":
+                    filtered = filtered.OrderBy(m => m.price).ToList(); break;
+                case "По цене (по убыванию)":
+                    filtered = filtered.OrderByDescending(m => m.price).ToList(); break;
+            }
 
-                var stack = new StackPanel();
+            listMedicines.ItemsSource = filtered;
+            tbCounter.Text = $"Найдено: {filtered.Count} из {allMedicines.Count}";
+        }
 
-                // Изображение или заглушка
-                var image = new Image
-                {
-                    Height = 100,
-                    Margin = new Thickness(0, 0, 0, 10),
-                    Stretch = System.Windows.Media.Stretch.UniformToFill
-                };
+        private void ComboFilter_SelectionChanged(object sender, SelectionChangedEventArgs e) => UpdateList();
+        private void ComboSort_SelectionChanged(object sender, SelectionChangedEventArgs e) => UpdateList();
+        private void TextSearch_TextChanged(object sender, TextChangedEventArgs e) => UpdateList();
 
-                try
+        private void AddMedicine_Click(object sender, RoutedEventArgs e)
+        {
+            NavigationService?.Navigate(new AddEditMedicinePage(null));
+        }
+
+        private void EditMedicine_Click(object sender, RoutedEventArgs e)
+        {
+            int id = (int)(sender as Button)?.Tag;
+            var item = context.Medicines.Find(id);
+            NavigationService?.Navigate(new AddEditMedicinePage(item));
+        }
+
+        private void DeleteMedicine_Click(object sender, RoutedEventArgs e)
+        {
+            int id = (int)(sender as Button)?.Tag;
+            var item = context.Medicines.Find(id);
+
+            if (MessageBox.Show($"Удалить {item.name}?", "Подтверждение", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+            {
+                context.Medicines.Remove(item);
+                context.SaveChanges();
+                LoadData();
+            }
+        }
+
+        private void ReviewsButton_Click(object sender, RoutedEventArgs e)
+        {
+            int medicineId = (int)(sender as Button)?.Tag;
+            NavigationService?.Navigate(new ReviewsPage(medicineId));
+        }
+
+        private void ManageReviews_Click(object sender, RoutedEventArgs e)
+        {
+            NavigationService?.Navigate(new ManageReviewsPage()); // создадим позже
+        }
+
+        private void ExportCSV_Click(object sender, RoutedEventArgs e)
+        {
+            SaveFileDialog saveFileDialog = new SaveFileDialog
+            {
+                Filter = "CSV файлы (*.csv)|*.csv",
+                FileName = "export_medicines.csv"
+            };
+
+            if (saveFileDialog.ShowDialog() == true)
+            {
+                var sb = new StringBuilder();
+                sb.AppendLine("Название;Описание;Цена;Страна");
+
+                foreach (var m in listMedicines.Items.Cast<Medicines>())
                 {
-                    if (!string.IsNullOrWhiteSpace(med.image_url))
-                        image.Source = new BitmapImage(new Uri(med.image_url, UriKind.RelativeOrAbsolute));
-                    else
-                        image.Source = new BitmapImage(new Uri("/Resources/placeholder.png", UriKind.Relative)); // Заглушка
+                    string name = m.name?.Replace(";", ",") ?? "";
+                    string desc = m.description?.Replace(";", ",") ?? "";
+                    string country = m.Countries?.country_name ?? "";
+
+                    sb.AppendLine($"{name};{desc};{m.price};{country}");
                 }
-                catch
-                {
-                    image.Source = new BitmapImage(new Uri("/Resources/placeholder.png", UriKind.Relative));
-                }
 
-                var nameText = new TextBlock
-                {
-                    Text = med.name,
-                    FontWeight = FontWeights.Bold,
-                    FontSize = 14,
-                    TextWrapping = TextWrapping.Wrap,
-                    Margin = new Thickness(0, 0, 0, 5)
-                };
-
-                var descText = new TextBlock
-                {
-                    Text = $"Цена: {med.price}₽",
-                    FontSize = 12
-                };
-
-                stack.Children.Add(image);
-                stack.Children.Add(nameText);
-                stack.Children.Add(descText);
-                border.Child = stack;
-
-                MedicineWrapPanel.Children.Add(border);
+                File.WriteAllText(saveFileDialog.FileName, sb.ToString(), Encoding.UTF8);
+                MessageBox.Show("Файл успешно сохранён:\n" + saveFileDialog.FileName, "Экспорт CSV", MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
 
-        private void SetupFilters()
+        private void Profile_Click(object sender, RoutedEventArgs e)
         {
-            // Пример фильтра по категории
-            var categories = AppConnect.model0db.MedicineCategories.Select(c => c.name).ToList();
-            categories.Insert(0, "Все");
-            FilterComboBox.ItemsSource = categories;
-            FilterComboBox.SelectedIndex = 0;
-
-            SortComboBox.ItemsSource = new List<string> { "По названию", "По цене (возр.)", "По цене (убыв.)" };
-            SortComboBox.SelectedIndex = 0;
-
-            SearchTextBox.TextChanged += (s, e) => ApplyFilters();
-            FilterComboBox.SelectionChanged += (s, e) => ApplyFilters();
-            SortComboBox.SelectionChanged += (s, e) => ApplyFilters();
+            NavigationService?.Navigate(new AdminProfilePage(AppConnect.CurrentUser));
         }
 
-        private void ApplyFilters()
+        private void Logout_Click(object sender, RoutedEventArgs e)
         {
-            var filtered = medicines.AsQueryable();
-
-            // Поиск
-            string search = SearchTextBox.Text.ToLower();
-            if (!string.IsNullOrWhiteSpace(search))
-                filtered = filtered.Where(m => m.name.ToLower().Contains(search));
-
-            // Фильтрация
-            string selectedCategory = FilterComboBox.SelectedItem?.ToString();
-            if (!string.IsNullOrWhiteSpace(selectedCategory) && selectedCategory != "Все")
-            {
-                filtered = filtered.Where(m => m.MedicineCategories.name == selectedCategory);
-            }
-
-            // Сортировка
-            string sortOption = SortComboBox.SelectedItem?.ToString();
-            switch (sortOption)
-            {
-                case "По названию":
-                    filtered = filtered.OrderBy(m => m.name);
-                    break;
-                case "По цене (возр.)":
-                    filtered = filtered.OrderBy(m => m.price);
-                    break;
-                case "По цене (убыв.)":
-                    filtered = filtered.OrderByDescending(m => m.price);
-                    break;
-            }
-
-            DisplayMedicines(filtered.ToList());
+            NavigationService?.Navigate(new LoginPage());
         }
 
-        private void AddButton_Click(object sender, RoutedEventArgs e)
-        {
-            MessageBox.Show("Открыть окно добавления лекарства", "Добавить", MessageBoxButton.OK, MessageBoxImage.Information);
-            // NavigationService.Navigate(new AddEditMedicinePage(null)); // если будет отдельная страница
-        }
-
-        private void EditButton_Click(object sender, RoutedEventArgs e)
-        {
-            MessageBox.Show("Выберите элемент для редактирования", "Редактировать", MessageBoxButton.OK, MessageBoxImage.Information);
-            // Можно реализовать выбор через клик по карточке
-        }
-
-        private void DeleteButton_Click(object sender, RoutedEventArgs e)
-        {
-            MessageBox.Show("Выберите элемент для удаления", "Удалить", MessageBoxButton.OK, MessageBoxImage.Warning);
-            // Реализация удаления будет позже
-        }
     }
 }

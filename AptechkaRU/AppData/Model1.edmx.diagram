@@ -36,6 +36,11 @@
         <AssociationConnector Association="AptechkaRUModel.FK__Reminders__user___4222D4EF" ManuallyRouted="false" />
         <AssociationConnector Association="AptechkaRUModel.FK__Users__role_id__300424B4" ManuallyRouted="false" />
         <AssociationConnector Association="AptechkaRUModel.FK__UserMedic__user___398D8EEE" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="AptechkaRUModel.Countries" Width="1.5" PointX="0.75" PointY="17.5" />
+        <EntityTypeShape EntityType="AptechkaRUModel.MedicineReviews" Width="1.5" PointX="11" PointY="5.375" />
+        <AssociationConnector Association="AptechkaRUModel.FK_Medicines_Countries" />
+        <AssociationConnector Association="AptechkaRUModel.FK__MedicineR__medic__60A75C0F" />
+        <AssociationConnector Association="AptechkaRUModel.FK__MedicineR__user___5FB337D6" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

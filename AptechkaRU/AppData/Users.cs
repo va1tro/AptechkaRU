@@ -22,6 +22,7 @@ namespace AptechkaRU.AppData
             this.PurchaseHistory = new HashSet<PurchaseHistory>();
             this.Reminders = new HashSet<Reminders>();
             this.UserMedicineKits = new HashSet<UserMedicineKits>();
+            this.MedicineReviews = new HashSet<MedicineReviews>();
         }
     
         public int user_id { get; set; }
@@ -45,5 +46,7 @@ namespace AptechkaRU.AppData
         public virtual Roles Roles { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<UserMedicineKits> UserMedicineKits { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<MedicineReviews> MedicineReviews { get; set; }
     }
 }

@@ -6,75 +6,80 @@
       xmlns:local="clr-namespace:AptechkaRU.Pages"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
-      Title="AdminPage" Background="#E0F7FA">
+      Title="AdminPage" Background="#E0F7F4">
 
-    <Grid Margin="20">
-        <!-- Основной контейнер -->
-        <Border Background="White" CornerRadius="20" BorderBrush="#4DB6AC" BorderThickness="2" Padding="20">
-            <DockPanel LastChildFill="True">
+    <Grid Background="#D0F0EC">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
 
-                <!-- Заголовок и кнопки -->
-                <StackPanel DockPanel.Dock="Top" Margin="0 0 0 10">
-                    <TextBlock Text="Управление лекарствами"
-                               FontSize="28"
-                               FontWeight="Bold"
-                               Foreground="#00695C"
-                               HorizontalAlignment="Center"
-                               Margin="0 0 0 20"/>
-
-                    <!-- Панель поиска и фильтрации -->
-                    <WrapPanel Margin="0 0 0 10" HorizontalAlignment="Left">
-                        <TextBox x:Name="SearchTextBox"
-                                 Width="200"
-                                 Margin="0 0 10 0"
-                                 Height="30"
-                                  />
-
-                        <ComboBox x:Name="FilterComboBox"
-                                  Width="150"
-                                  Height="30"
-                                  Margin="0 0 10 0"
-                                  />
-
-                        <ComboBox x:Name="SortComboBox"
-                                  Width="150"
-                                  Height="30"
-                                  />
-                    </WrapPanel>
-
-                    <!-- Панель кнопок -->
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0 0 0 10">
-                        <Button Content="Добавить"
-                                Click="AddButton_Click"
-                                Background="#4DB6AC"
-                                Foreground="White"
-                                Padding="10 5"
-                                FontWeight="Bold"
-                                Margin="0 0 10 0"
-                                Cursor="Hand"/>
-                        <Button Content="Редактировать"
-                                Click="EditButton_Click"
-                                Background="#4DB6AC"
-                                Foreground="White"
-                                Padding="10 5"
-                                FontWeight="Bold"
-                                Margin="0 0 10 0"
-                                Cursor="Hand"/>
-                        <Button Content="Удалить"
-                                Click="DeleteButton_Click"
-                                Background="#E57373"
-                                Foreground="White"
-                                Padding="10 5"
-                                FontWeight="Bold"
-                                Cursor="Hand"/>
-                    </StackPanel>
-                </StackPanel>
-
-                <!-- Карточки лекарств -->
-                <ScrollViewer>
-                    <WrapPanel x:Name="MedicineWrapPanel" HorizontalAlignment="Center" />
-                </ScrollViewer>
-            </DockPanel>
+        <!-- Верхнее меню -->
+        <Border Background="#B2DCD4" CornerRadius="0,0,10,10" BorderBrush="#2C6B60" BorderThickness="0,0,0,1" Grid.Row="0">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <Button Content="👤 Личный кабинет" Click="Profile_Click" FontSize="16" FontWeight="SemiBold"
+                        Margin="10,0" Padding="15,5"
+                        Background="White" Foreground="#2C6B60" 
+                        BorderBrush="#2C6B60" BorderThickness="1" Cursor="Hand"/>
+                <Button Content="💬 Отзывы" Click="ManageReviews_Click" FontSize="16" FontWeight="SemiBold"
+                        Margin="10,0" Padding="15,5"
+                        Background="White" Foreground="#2C6B60" 
+                        BorderBrush="#2C6B60" BorderThickness="1" Cursor="Hand"/>
+                <Button Content="➕ Добавить" Click="AddMedicine_Click" FontSize="16" FontWeight="SemiBold"
+                        Margin="10,0" Padding="15,5"
+                        Background="White" Foreground="#2C6B60" 
+                        BorderBrush="#2C6B60" BorderThickness="1" Cursor="Hand"/>
+                <Button Content="⛔ Выход" Click="Logout_Click" Background="#FF7A6C" Foreground="White" FontSize="16" FontWeight="SemiBold"
+                        Margin="10,0" Padding="15,5" BorderThickness="1" Cursor="Hand"/>
+            </StackPanel>
         </Border>
+
+        <!-- Фильтр / поиск / экспорт -->
+        <StackPanel Orientation="Horizontal" Grid.Row="1" Background="#B2DCD4">
+            <ComboBox x:Name="ComboFilter" Width="200" Margin="5" SelectionChanged="ComboFilter_SelectionChanged"/>
+            <ComboBox x:Name="ComboSort" Width="200" Margin="5" SelectionChanged="ComboSort_SelectionChanged">
+                <ComboBoxItem Content="По алфавиту"/>
+                <ComboBoxItem Content="По цене (по возрастанию)"/>
+                <ComboBoxItem Content="По цене (по убыванию)"/>
+            </ComboBox>
+            <TextBox x:Name="TextSearch" Width="200" Margin="5" TextChanged="TextSearch_TextChanged"/>
+            <Button Content="📤 Экспорт CSV" Margin="5" Click="ExportCSV_Click"/>
+        </StackPanel>
+
+        <!-- Список товаров -->
+        <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto" >
+            <ItemsControl x:Name="listMedicines">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel IsItemsHost="True" HorizontalAlignment="Center"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border BorderBrush="#82B5A9" BorderThickness="1" CornerRadius="8" Margin="10" Padding="10"
+                                MaxWidth="250" MinWidth="200" Height="380" Background="White">
+                            <StackPanel>
+                                <Image Source="{Binding CurrentPhoto}" Height="140" Stretch="UniformToFill" Margin="0,0,0,10"/>
+                                <TextBlock Text="{Binding name}" FontWeight="Bold" FontSize="16" TextAlignment="Center" Foreground="#2C6B60"/>
+                                <TextBlock Text="{Binding description}" TextWrapping="Wrap" FontSize="12" Margin="0,5"/>
+                                <TextBlock Text="{Binding price, StringFormat='Цена: {0} ₽'}" FontWeight="Bold" Foreground="#2C6B60"/>
+                                <TextBlock Text="{Binding Countries.country_name, StringFormat='Страна: {0}'}" Foreground="Gray" FontSize="12"/>
+
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,0">
+                                    <Button Content="✏" Click="EditMedicine_Click" Tag="{Binding medicine_id}" Width="40" Margin="5"/>
+                                    <Button Content="🗑" Click="DeleteMedicine_Click" Tag="{Binding medicine_id}" Width="40" Margin="5"/>
+                                    <Button Content="Отзывы" Click="ReviewsButton_Click" Tag="{Binding medicine_id}" Width="60" Margin="5"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+
+        <!-- Статус -->
+        <TextBlock x:Name="tbCounter" Grid.Row="3" Margin="10" Foreground="#2C6B60"/>
     </Grid>
 </Page>

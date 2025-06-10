@@ -190,6 +190,14 @@ namespace AptechkaRU.Pages
             AppConnect.CurrentUser = null;
             NavigationService.Navigate(new LoginPage());
         }
-        
+        private void ReviewsButton_Click(object sender, RoutedEventArgs e)
+        {
+            var button = sender as Button;
+            if (button?.Tag is int medicineId)
+            {
+                ReviewsPage reviewsPage = new ReviewsPage(medicineId);
+                NavigationService?.Navigate(reviewsPage);
+            }
+        }
     }
 }

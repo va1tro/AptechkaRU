@@ -22,6 +22,7 @@ namespace AptechkaRU.AppData
             this.KitMedicines = new HashSet<KitMedicines>();
             this.PurchasedMedicines = new HashSet<PurchasedMedicines>();
             this.Reminders = new HashSet<Reminders>();
+            this.MedicineReviews = new HashSet<MedicineReviews>();
         }
     
         public int medicine_id { get; set; }
@@ -33,6 +34,7 @@ namespace AptechkaRU.AppData
         public Nullable<bool> requires_prescription { get; set; }
         public Nullable<int> stock_quantity { get; set; }
         public string image_url { get; set; }
+        public Nullable<int> country_id { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Cart> Cart { get; set; }
@@ -46,6 +48,10 @@ namespace AptechkaRU.AppData
         public virtual ICollection<PurchasedMedicines> PurchasedMedicines { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Reminders> Reminders { get; set; }
+        public virtual Countries Countries { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<MedicineReviews> MedicineReviews { get; set; }
+
         public string CurrentPhoto
         {
             get
