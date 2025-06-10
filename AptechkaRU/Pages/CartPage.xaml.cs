@@ -231,7 +231,7 @@ namespace AptechkaRU.Pages
                     FileName = $"Чек_{purchase.purchase_id}_{DateTime.Now:yyyyMMddHHmmss}.pdf",
                     OverwritePrompt = true
                 };
-
+                 
                 if (saveFileDialog.ShowDialog() == true)
                 {
                     // Проверка доступности файла
