@@ -29,10 +29,10 @@
                 <CheckBox x:Name="cbPrescription" Margin="0,0,0,10"/>
 
                 <TextBlock Text="Производитель:"/>
-                <ComboBox x:Name="cbManufacturer" DisplayMemberPath="name" SelectedValuePath="manufacturer_id" Margin="0,0,0,10"/>
+                <ComboBox x:Name="cbManufacturer" DisplayMemberPath="manufacturer_name" SelectedValuePath="manufacturer_id" Margin="0,0,0,10"/>
 
                 <TextBlock Text="Категория:"/>
-                <ComboBox x:Name="cbCategory" DisplayMemberPath="category_name" SelectedValuePath="category_id" Margin="0,0,0,10"/>
+                <ComboBox x:Name="cbCategory" DisplayMemberPath="name" SelectedValuePath="category_id" Margin="0,0,0,10"/>
 
                 <TextBlock Text="Страна:"/>
                 <ComboBox x:Name="cbCountry" DisplayMemberPath="country_name" SelectedValuePath="country_id" Margin="0,0,0,10"/>
