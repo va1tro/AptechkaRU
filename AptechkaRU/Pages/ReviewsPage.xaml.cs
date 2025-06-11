@@ -51,5 +51,10 @@ namespace AptechkaRU.Pages
             addReviewWindow.ShowDialog();
             LoadReviews(); // Обновить отзывы после добавления
         }
+
+        private void btnBack_Click(object sender, RoutedEventArgs e)
+        {
+            NavigationService.GoBack();
+        }
     }
 }

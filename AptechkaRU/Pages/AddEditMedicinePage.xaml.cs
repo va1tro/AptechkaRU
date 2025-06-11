@@ -94,31 +94,31 @@ namespace AptechkaRU.Pages
 
             if (dlg.ShowDialog() == true)
             {
-                _imagePath = dlg.FileName;
-                _imageFileName = System.IO.Path.GetFileName(_imagePath);
-
-                string imagesDir = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Images");
-                if (!Directory.Exists(imagesDir))
-                    Directory.CreateDirectory(imagesDir);
-
-                string destPath = System.IO.Path.Combine(imagesDir, _imageFileName);
-
                 try
                 {
-                    // Копируем всегда, перезаписывая файл
-                    File.Copy(_imagePath, destPath, overwrite: true);
+                    // Создаем папку Images, если её нет
+                    string imagesDir = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Images");
+                    if (!Directory.Exists(imagesDir))
+                        Directory.CreateDirectory(imagesDir);
 
-                    // Отображаем изображение, используя корректный Uri
-                    imgPreview.Source = new BitmapImage(new Uri(destPath, UriKind.Absolute));
+                    // Получаем имя файла и генерируем уникальное имя, чтобы избежать перезаписи
+                    string extension = System.IO.Path.GetExtension(dlg.FileName);
+                    _imageFileName = Guid.NewGuid().ToString() + extension;
+                    _imagePath = System.IO.Path.Combine(imagesDir, _imageFileName);
+
+                    // Копируем файл
+                    File.Copy(dlg.FileName, _imagePath, overwrite: true);
+
+                    // Отображаем изображение
+                    imgPreview.Source = new BitmapImage(new Uri(_imagePath));
                     tbImageFile.Text = _imageFileName;
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"Ошибка при копировании изображения: {ex.Message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show($"Ошибка при загрузке изображения: {ex.Message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
         }
-
 
         private string ValidateImagePath(string imageFileName)
         {
@@ -139,31 +139,58 @@ namespace AptechkaRU.Pages
 
         private void Save_Click(object sender, RoutedEventArgs e)
         {
-            try
+            using (var context = new AptechkaRUEntities1()) // Используем using для правильного освобождения
             {
-                currentMedicine.name = tbName.Text;
-                currentMedicine.description = tbDescription.Text;
-                currentMedicine.price = decimal.Parse(tbPrice.Text);
-                currentMedicine.stock_quantity = int.TryParse(tbStock.Text, out int stock) ? stock : 0;
-                currentMedicine.requires_prescription = cbPrescription.IsChecked;
-                currentMedicine.manufacturer_id = (int)cbManufacturer.SelectedValue;
-                currentMedicine.category_id = (int)cbCategory.SelectedValue;
-                currentMedicine.country_id = (int?)cbCountry.SelectedValue;
-                currentMedicine.image_url = ValidateImagePath(_imageFileName);
+                try
+                {
+                    // Проверяем обязательные поля
+                    if (string.IsNullOrWhiteSpace(tbName.Text) || cbManufacturer.SelectedValue == null ||
+                    cbCategory.SelectedValue == null || string.IsNullOrWhiteSpace(tbPrice.Text))
+                    {
+                        MessageBox.Show("Заполните обязательные поля: Название, Производитель, Категория, Цена");
+                        return;
+                    }
 
-                if (currentMedicine.medicine_id == 0)
-                    context.Medicines.Add(currentMedicine);
+                    // Заполняем данные
+                    currentMedicine.name = tbName.Text;
+                    currentMedicine.description = tbDescription.Text;
+                    currentMedicine.price = decimal.Parse(tbPrice.Text);
+                    currentMedicine.stock_quantity = int.TryParse(tbStock.Text, out int stock) ? stock : 0;
+                    currentMedicine.requires_prescription = cbPrescription.IsChecked ?? false;
+                    currentMedicine.manufacturer_id = (int)cbManufacturer.SelectedValue;
+                    currentMedicine.category_id = (int)cbCategory.SelectedValue;
+                    currentMedicine.country_id = cbCountry.SelectedValue as int?;
 
-                context.SaveChanges();
-                MessageBox.Show("Сохранено успешно!");
-                NavigationService.Navigate(new AdminPage());
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Ошибка сохранения: " + ex.Message);
+                    // Обновляем изображение только если было выбрано новое
+                    if (!string.IsNullOrWhiteSpace(_imageFileName))
+                    {
+                        currentMedicine.image_url = _imageFileName;
+                    }
+                    else if (currentMedicine.medicine_id == 0) // Для нового товара без изображения
+                    {
+                        currentMedicine.image_url = "picture.jpg";
+                    }
+
+                    // Добавляем или обновляем
+                    if (currentMedicine.medicine_id == 0)
+                    {
+                        context.Medicines.Add(currentMedicine);
+                    }
+                    else
+                    {
+                        context.Entry(currentMedicine).State = System.Data.Entity.EntityState.Modified;
+                    }
+
+                    context.SaveChanges();
+                    MessageBox.Show("Сохранено успешно!");
+                    NavigationService.Navigate(new AdminPage());
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Ошибка сохранения: " + ex.Message);
+                }
             }
         }
-
         private void Back_Click(object sender, RoutedEventArgs e)
         {
             NavigationService?.GoBack();

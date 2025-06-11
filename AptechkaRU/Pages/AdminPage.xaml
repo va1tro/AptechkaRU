@@ -38,13 +38,21 @@
 
         <!-- Фильтр / поиск / экспорт -->
         <StackPanel Orientation="Horizontal" Grid.Row="1" Background="#B2DCD4">
-            <ComboBox x:Name="ComboFilter" Width="200" Margin="5" SelectionChanged="ComboFilter_SelectionChanged"/>
-            <ComboBox x:Name="ComboSort" Width="200" Margin="5" SelectionChanged="ComboSort_SelectionChanged">
+            <ComboBox x:Name="ComboFilter" Width="200" Height="26" Margin="5"
+          SelectionChanged="ComboFilter_SelectionChanged"
+          ToolTip="Фильтрация по категориям"/>
+            <ComboBox x:Name="ComboSort" Width="180" Height="26" Margin="5"
+          SelectionChanged="ComboSort_SelectionChanged"
+          ToolTip="Сортировка">
                 <ComboBoxItem Content="По алфавиту"/>
                 <ComboBoxItem Content="По цене (по возрастанию)"/>
                 <ComboBoxItem Content="По цене (по убыванию)"/>
+                <ComboBoxItem Content="По дате (новые)"/>
+                <ComboBoxItem Content="По дате (старые)"/>
             </ComboBox>
-            <TextBox x:Name="TextSearch" Width="200" Margin="5" TextChanged="TextSearch_TextChanged"/>
+            <TextBox x:Name="TextSearch" Width="200" Height="26" Margin="5"
+         TextChanged="TextSearch_TextChanged"
+         ToolTip="Поиск по названию"/>
             <Button Content="📤 Экспорт CSV" Margin="5" Click="ExportCSV_Click"/>
         </StackPanel>
 

@@ -22,6 +22,7 @@
         </ListView>
 
         <Button Content="Добавить отзыв" Margin="0,10,0,0" Click="AddReviewButton_Click" Background="#007979" Foreground="White"/>
+        <Button Content="Назад" Margin="0,10,0,0" Click="btnBack_Click" Background="White" Foreground="#007979"/>
     </StackPanel>
 
 </Page>

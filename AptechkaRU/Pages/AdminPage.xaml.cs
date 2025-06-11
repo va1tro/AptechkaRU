@@ -35,31 +35,86 @@ namespace AptechkaRU.Pages
         private void LoadData()
         {
             allMedicines = context.Medicines.Include("Countries").ToList();
-            UpdateList();
+            LoadFilters();
+            LoadMedicines();
+        }
+        private void LoadFilters()
+        {
+            ComboFilter.Items.Add("Все категории");
+            foreach (var cat in context.MedicineCategories.ToList())
+                ComboFilter.Items.Add(cat.name);
+            ComboFilter.SelectedIndex = 0;
+            ComboSort.SelectedIndex = 0;
         }
 
-        private void UpdateList()
+        private void LoadMedicines()
         {
-            var filtered = allMedicines.Where(m => string.IsNullOrWhiteSpace(TextSearch.Text) ||
-                                                   m.name.ToLower().Contains(TextSearch.Text.ToLower())).ToList();
+            allMedicines = context.Medicines.ToList();
+            ApplySearchFilterSort();
+        }
 
-            switch ((ComboSort.SelectedItem as ComboBoxItem)?.Content.ToString())
+        private void ApplySearchFilterSort()
+        {
+            if (allMedicines == null)
             {
-                case "По алфавиту":
-                    filtered = filtered.OrderBy(m => m.name).ToList(); break;
-                case "По цене (по возрастанию)":
-                    filtered = filtered.OrderBy(m => m.price).ToList(); break;
-                case "По цене (по убыванию)":
-                    filtered = filtered.OrderByDescending(m => m.price).ToList(); break;
+                listMedicines.ItemsSource = new List<Medicines>();
+                tbCounter.Text = "Найдено: 0";
+                return;
             }
 
-            listMedicines.ItemsSource = filtered;
-            tbCounter.Text = $"Найдено: {filtered.Count} из {allMedicines.Count}";
+            IEnumerable<Medicines> filtered = allMedicines;
+
+            // Поиск
+            string search = TextSearch?.Text?.ToLower() ?? "";
+            if (!string.IsNullOrWhiteSpace(search))
+                filtered = filtered.Where(m => m.name != null && m.name.ToLower().Contains(search));
+
+            // Фильтрация по категории
+            if (ComboFilter?.SelectedIndex > 0)
+            {
+                string selectedCategory = ComboFilter.SelectedItem.ToString();
+                filtered = filtered.Where(m => m.MedicineCategories != null && m.MedicineCategories.name == selectedCategory);
+            }
+
+            // Сортировка
+            string sortOption = (ComboSort?.SelectedItem as ComboBoxItem)?.Content?.ToString() ?? "";
+            switch (sortOption)
+            {
+                case "По алфавиту":
+                    filtered = filtered.OrderBy(m => m.name);
+                    break;
+                case "По цене (по возрастанию)":
+                    filtered = filtered.OrderBy(m => m.price);
+                    break;
+                case "По цене (по убыванию)":
+                    filtered = filtered.OrderByDescending(m => m.price);
+                    break;
+            }
+
+            var filteredList = filtered.ToList(); // Теперь точно не null
+            listMedicines.ItemsSource = filteredList;
+            tbCounter.Text = $"Найдено: {filteredList.Count}";
         }
 
-        private void ComboFilter_SelectionChanged(object sender, SelectionChangedEventArgs e) => UpdateList();
-        private void ComboSort_SelectionChanged(object sender, SelectionChangedEventArgs e) => UpdateList();
-        private void TextSearch_TextChanged(object sender, TextChangedEventArgs e) => UpdateList();
+
+        private void TextSearch_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            ApplySearchFilterSort();
+        }
+
+        private void ComboFilter_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ApplySearchFilterSort();
+        }
+
+        private void ComboSort_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ApplySearchFilterSort();
+        }
+
+        //private void ComboFilter_SelectionChanged(object sender, SelectionChangedEventArgs e) => UpdateList();
+        //private void ComboSort_SelectionChanged(object sender, SelectionChangedEventArgs e) => UpdateList();
+        //private void TextSearch_TextChanged(object sender, TextChangedEventArgs e) => UpdateList();
 
         private void AddMedicine_Click(object sender, RoutedEventArgs e)
         {

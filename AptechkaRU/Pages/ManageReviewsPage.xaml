@@ -5,10 +5,86 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:AptechkaRU.Pages"
       mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
+      d:DesignHeight="450" d:DesignWidth="800" Background="#E0F7F4"
       Title="ManageReviewsPage">
 
     <Grid>
-        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Заголовок и фильтры -->
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="10">
+            <TextBlock Text="Модерация отзывов" 
+                       FontSize="16" 
+                       FontWeight="Bold"
+                       VerticalAlignment="Center"/>
+
+            <ComboBox x:Name="cbFilter" 
+                      Margin="10,0,0,0" 
+                      Width="150"
+                      SelectedIndex="0">
+                <ComboBox.Items>
+                    <ComboBoxItem Content="Все отзывы"/>
+                    <ComboBoxItem Content="На модерации"/>
+                    <ComboBoxItem Content="Одобренные"/>
+                    <ComboBoxItem Content="Отклоненные"/>
+                </ComboBox.Items>
+            </ComboBox>
+        </StackPanel>
+
+        <!-- Список отзывов -->
+        <DataGrid x:Name="dgReviews" 
+                  Grid.Row="1" 
+                  AutoGenerateColumns="False" 
+                  CanUserAddRows="False"
+                  SelectionMode="Single" 
+                  SelectionUnit="FullRow" 
+                  Margin="10"
+                  IsReadOnly="True">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="ID" 
+                                   Binding="{Binding review_id}" 
+                                   Width="Auto"/>
+                <DataGridTextColumn Header="Пользователь" 
+                                   Binding="{Binding Users.username}" 
+                                   Width="*"/>
+                <DataGridTextColumn Header="Лекарство" 
+                                   Binding="{Binding Medicines.name}" 
+                                   Width="*"/>
+                <DataGridTextColumn Header="Рейтинг" 
+                                   Binding="{Binding rating}" 
+                                   Width="Auto"/>
+                <DataGridTextColumn Header="Дата" 
+                                   Binding="{Binding review_date, StringFormat=dd.MM.yyyy}" 
+                                   Width="Auto"/>
+                <DataGridCheckBoxColumn Header="Одобрен" 
+                                      Binding="{Binding is_approved}" 
+                                      Width="Auto"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <!-- Панель действий -->
+        <StackPanel Grid.Row="2" 
+                    Orientation="Horizontal" 
+                    HorizontalAlignment="Right" 
+                    Margin="10">
+            <Button x:Name="btnApprove" 
+                    Content="Одобрить" 
+                    Width="100" 
+                    Margin="0,0,10,0" 
+                    Click="Approve_Click"/>
+            <Button x:Name="btnReject" 
+                    Content="Отклонить" 
+                    Width="100" 
+                    Margin="0,0,10,0" 
+                    Click="Reject_Click"/>
+            <Button x:Name="btnBack" 
+                    Content="Назад" 
+                    Width="80" 
+                    Click="Back_Click"/>
+        </StackPanel>
     </Grid>
 </Page>
