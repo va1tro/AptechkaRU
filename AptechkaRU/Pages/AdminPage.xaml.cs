@@ -196,6 +196,9 @@ namespace AptechkaRU.Pages
         {
             NavigationService?.Navigate(new LoginPage());
         }
-
+        private void AboutPage_Click(object sender, RoutedEventArgs e)
+        {
+            NavigationService.Navigate(new AboutPage());
+        }
     }
 }

@@ -25,6 +25,11 @@
                         Margin="10,0" Padding="15,5"
                         Background="White" Foreground="#2C6B60" 
                         BorderBrush="#2C6B60" BorderThickness="1" Cursor="Hand"/>
+                <Button Content="💊 О нас" Click="AboutPage_Click"
+                        FontSize="16" FontWeight="SemiBold"
+                        Margin="10,0" Padding="15,5"
+                        Background="White" Foreground="#2C6B60" 
+                        BorderBrush="#2C6B60" BorderThickness="1" Cursor="Hand"/>
 
                 <Button Content="⭐ Избранное" Click="Favorites_Click"
                         FontSize="16" FontWeight="SemiBold"

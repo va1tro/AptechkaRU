@@ -198,5 +198,10 @@ namespace AptechkaRU.Pages
                 NavigationService?.Navigate(reviewsPage);
             }
         }
+
+        private void AboutPage_Click(object sender, RoutedEventArgs e)
+        {
+            NavigationService.Navigate(new AboutPage());
+        }
     }
 }
