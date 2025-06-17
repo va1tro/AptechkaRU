@@ -11,34 +11,50 @@
     <Page.Resources>
         <pages:EmptyToVisibilityConverter x:Key="EmptyToVisibility"/>
         <Style TargetType="TextBox" x:Key="RoundedTextBox">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="#4DB6AC"/>
+            <Setter Property="BorderThickness" Value="1.5"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Height" Value="35"/>
+            <Setter Property="Padding" Value="5,0,0,0"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="TextBox">
-                        <Grid>
-                            <Border Background="White" BorderBrush="#4DB6AC" BorderThickness="1.5" CornerRadius="10"/>
-                            <ScrollViewer x:Name="PART_ContentHost" Margin="8,0,0,0"/>
-                        </Grid>
+                        <Border Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        CornerRadius="10"
+                        Padding="{TemplateBinding Padding}">
+                            <ScrollViewer x:Name="PART_ContentHost"
+                                  VerticalAlignment="Center"/>
+                        </Border>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
-            <Setter Property="Height" Value="35"/>
-            <Setter Property="FontSize" Value="14"/>
         </Style>
 
         <!-- Стиль скруглённого PasswordBox -->
         <Style TargetType="PasswordBox" x:Key="RoundedPasswordBox">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="#4DB6AC"/>
+            <Setter Property="BorderThickness" Value="1.5"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Height" Value="35"/>
+            <Setter Property="Padding" Value="5,0,0,0"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="PasswordBox">
-                        <Grid>
-                            <Border Background="White" BorderBrush="#4DB6AC" BorderThickness="1.5" CornerRadius="10"/>
-                            <ScrollViewer x:Name="PART_ContentHost" Margin="8,0,0,0"/>
-                        </Grid>
+                        <Border Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        CornerRadius="10"
+                        Padding="{TemplateBinding Padding}">
+                            <ScrollViewer x:Name="PART_ContentHost"
+                                  VerticalAlignment="Center"/>
+                        </Border>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
-            <Setter Property="Height" Value="35"/>
-            <Setter Property="FontSize" Value="14"/>
         </Style>
     </Page.Resources>
 
@@ -72,12 +88,15 @@
                     </Grid>
 
                     <Grid Margin="0,0,0,10">
-                        <PasswordBox x:Name="PasswordBox" Style="{StaticResource RoundedPasswordBox}" PasswordChanged="FieldChanged"/>
-                        <TextBlock Text="Пароль" Foreground="Gray"
-                                   Margin="12,0,0,0" VerticalAlignment="Center"
-                                   IsHitTestVisible="False"
-                                   Visibility="{Binding Password, ElementName=PasswordBox, Converter={StaticResource EmptyToVisibility}}"/>
+                        <PasswordBox x:Name="PasswordBox" Style="{StaticResource RoundedPasswordBox}" PasswordChanged="PasswordBox_PasswordChanged"/>
+                        <TextBlock x:Name="PasswordPlaceholder"
+                                    Text="Пароль"
+                                    Foreground="Gray"
+                                    Margin="12,0,0,0"
+                                    VerticalAlignment="Center"
+                                    IsHitTestVisible="False"/>
                     </Grid>
+
 
                     <Grid Margin="0,0,0,10">
                         <TextBox x:Name="EmailTextBox" Style="{StaticResource RoundedTextBox}" TextChanged="FieldChanged"/>

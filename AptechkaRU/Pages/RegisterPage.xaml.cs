@@ -25,6 +25,15 @@ namespace AptechkaRU.Pages
         {
             InitializeComponent();
         }
+        private void PasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
+        {
+            PasswordPlaceholder.Visibility = string.IsNullOrEmpty(PasswordBox.Password)
+                ? Visibility.Visible
+                : Visibility.Collapsed;
+
+            FieldChanged(sender, e); // если ты уже обрабатываешь изменение
+        }
+
         private void RegisterButton_Click(object sender, RoutedEventArgs e)
         {
             // Сбор данных

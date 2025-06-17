@@ -24,19 +24,18 @@ namespace AptechkaRU.Pages
     public partial class AddEditMedicinePage : Page
     {
         private Medicines currentMedicine;
-        private AptechkaRUEntities1 context = new AptechkaRUEntities1();
+        private AptechkaRUEntities1 context; // Уберите инициализацию здесь
         private string selectedImageFile = null;
-        private string _imagePath = null; // Полный путь
-        private string _imageFileName = null; // Только имя файла
+        private string _imagePath = null;
+        private string _imageFileName = null;
 
         public string PageTitle => currentMedicine.medicine_id == 0 ? "Добавление лекарства" : "Редактирование лекарства";
 
         public AddEditMedicinePage(Medicines medicine)
         {
             InitializeComponent();
-
+            context = new AptechkaRUEntities1(); // Инициализируем контекст в конструкторе
             currentMedicine = medicine ?? new Medicines();
-
             DataContext = this;
             LoadComboBoxes();
             FillFields();
@@ -46,7 +45,6 @@ namespace AptechkaRU.Pages
             {
                 _imageFileName = currentMedicine.image_url;
                 _imagePath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Images", _imageFileName);
-
                 if (File.Exists(_imagePath))
                 {
                     try
@@ -96,26 +94,31 @@ namespace AptechkaRU.Pages
             {
                 try
                 {
-                    // Создаем папку Images, если её нет
                     string imagesDir = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Images");
                     if (!Directory.Exists(imagesDir))
+                    {
                         Directory.CreateDirectory(imagesDir);
+                    }
 
-                    // Получаем имя файла и генерируем уникальное имя, чтобы избежать перезаписи
-                    string extension = System.IO.Path.GetExtension(dlg.FileName);
-                    _imageFileName = Guid.NewGuid().ToString() + extension;
+                    _imageFileName = System.IO.Path.GetFileName(dlg.FileName); // Используем исходное имя
                     _imagePath = System.IO.Path.Combine(imagesDir, _imageFileName);
 
-                    // Копируем файл
-                    File.Copy(dlg.FileName, _imagePath, overwrite: true);
+                    // Копируем файл, если его еще нет, чтобы избежать перезаписи
+                    if (!File.Exists(_imagePath))
+                    {
+                        File.Copy(dlg.FileName, _imagePath);
+                    }
 
-                    // Отображаем изображение
                     imgPreview.Source = new BitmapImage(new Uri(_imagePath));
                     tbImageFile.Text = _imageFileName;
                 }
                 catch (Exception ex)
                 {
                     MessageBox.Show($"Ошибка при загрузке изображения: {ex.Message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                    _imageFileName = null;
+                    _imagePath = null;
+                    tbImageFile.Text = "";
+                    imgPreview.Source = null;
                 }
             }
         }
@@ -125,13 +128,10 @@ namespace AptechkaRU.Pages
             string defaultImage = "picture.jpg";
             string imagesDir = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Images");
 
-            // если путь пуст — возвращаем заглушку
             if (string.IsNullOrWhiteSpace(imageFileName))
                 return defaultImage;
 
             string fullPath = System.IO.Path.Combine(imagesDir, imageFileName);
-
-            // если файл не существует — возвращаем заглушку
             return File.Exists(fullPath) ? imageFileName : defaultImage;
         }
 
@@ -139,56 +139,65 @@ namespace AptechkaRU.Pages
 
         private void Save_Click(object sender, RoutedEventArgs e)
         {
-            using (var context = new AptechkaRUEntities1()) // Используем using для правильного освобождения
+            try
             {
-                try
-                {
-                    // Проверяем обязательные поля
-                    if (string.IsNullOrWhiteSpace(tbName.Text) || cbManufacturer.SelectedValue == null ||
+                // Проверяем обязательные поля
+                if (string.IsNullOrWhiteSpace(tbName.Text) || cbManufacturer.SelectedValue == null ||
                     cbCategory.SelectedValue == null || string.IsNullOrWhiteSpace(tbPrice.Text))
+                {
+                    MessageBox.Show("Заполните обязательные поля: Название, Производитель, Категория, Цена");
+                    return;
+                }
+
+                using (var context = new AptechkaRUEntities1())
+                {
+                    Medicines medicineToSave;
+                    if (currentMedicine.medicine_id == 0)
                     {
-                        MessageBox.Show("Заполните обязательные поля: Название, Производитель, Категория, Цена");
-                        return;
+                        medicineToSave = new Medicines(); // Новый объект для добавления
+                    }
+                    else
+                    {
+                        // Загружаем объект заново из текущего контекста
+                        medicineToSave = context.Medicines.FirstOrDefault(m => m.medicine_id == currentMedicine.medicine_id);
+                        if (medicineToSave == null)
+                        {
+                            MessageBox.Show("Лекарство не найдено");
+                            return;
+                        }
                     }
 
                     // Заполняем данные
-                    currentMedicine.name = tbName.Text;
-                    currentMedicine.description = tbDescription.Text;
-                    currentMedicine.price = decimal.Parse(tbPrice.Text);
-                    currentMedicine.stock_quantity = int.TryParse(tbStock.Text, out int stock) ? stock : 0;
-                    currentMedicine.requires_prescription = cbPrescription.IsChecked ?? false;
-                    currentMedicine.manufacturer_id = (int)cbManufacturer.SelectedValue;
-                    currentMedicine.category_id = (int)cbCategory.SelectedValue;
-                    currentMedicine.country_id = cbCountry.SelectedValue as int?;
+                    medicineToSave.name = tbName.Text;
+                    medicineToSave.description = tbDescription.Text;
+                    medicineToSave.price = decimal.Parse(tbPrice.Text);
+                    medicineToSave.stock_quantity = int.TryParse(tbStock.Text, out int stock) ? stock : 0;
+                    medicineToSave.requires_prescription = cbPrescription.IsChecked ?? false;
+                    medicineToSave.manufacturer_id = (int)cbManufacturer.SelectedValue;
+                    medicineToSave.category_id = (int)cbCategory.SelectedValue;
+                    medicineToSave.country_id = cbCountry.SelectedValue as int?;
 
-                    // Обновляем изображение только если было выбрано новое
-                    if (!string.IsNullOrWhiteSpace(_imageFileName))
-                    {
-                        currentMedicine.image_url = _imageFileName;
-                    }
-                    else if (currentMedicine.medicine_id == 0) // Для нового товара без изображения
-                    {
-                        currentMedicine.image_url = "picture.jpg";
-                    }
+                    // Обновляем изображение
+                    medicineToSave.image_url = ValidateImagePath(_imageFileName ?? tbImageFile.Text);
 
                     // Добавляем или обновляем
                     if (currentMedicine.medicine_id == 0)
                     {
-                        context.Medicines.Add(currentMedicine);
+                        context.Medicines.Add(medicineToSave);
                     }
                     else
                     {
-                        context.Entry(currentMedicine).State = System.Data.Entity.EntityState.Modified;
+                        context.Entry(medicineToSave).State = System.Data.Entity.EntityState.Modified;
                     }
 
                     context.SaveChanges();
                     MessageBox.Show("Сохранено успешно!");
                     NavigationService.Navigate(new AdminPage());
                 }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Ошибка сохранения: " + ex.Message);
-                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Ошибка сохранения: " + ex.Message);
             }
         }
         private void Back_Click(object sender, RoutedEventArgs e)

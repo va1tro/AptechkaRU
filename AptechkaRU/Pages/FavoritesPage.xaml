@@ -14,8 +14,8 @@
                        FontSize="28" FontWeight="Bold" 
                        Foreground="#2B7A78" Margin="0,0,0,20"/>
             <Button Content="← Назад" Width="80" Height="30" Background="Transparent"
-        BorderBrush="Transparent" BorderThickness="1" Foreground="#007979"
-        FontWeight="Normal" Margin="0,0,0,10" Click="BackButton_Click"/>
+            BorderBrush="Transparent" BorderThickness="1" Foreground="#007979"
+            FontWeight="Normal" Margin="0,0,0,10" Click="BackButton_Click"/>
             <ItemsControl x:Name="FavoritesList">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
@@ -28,7 +28,7 @@
                                     <ColumnDefinition Width="Auto"/>
                                 </Grid.ColumnDefinitions>
 
-                                <Image Source="{Binding Medicines.CurrentPhoto}" Width="100" Height="100" Margin="10" />
+                                <Image Source="{Binding CurrentPhoto}" Width="100" Height="100" Margin="10"/>
 
                                 <StackPanel Grid.Column="1" Margin="10,0" VerticalAlignment="Center">
                                     <TextBlock Text="{Binding name}" 

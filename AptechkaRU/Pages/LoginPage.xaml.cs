@@ -38,6 +38,18 @@ namespace AptechkaRU.Pages
                 ? Visibility.Visible
                 : Visibility.Collapsed;
         }
+        private void Page_Loaded(object sender, RoutedEventArgs e)
+        {
+            Keyboard.Focus(LoginTextBox); // Установить фокус на логин при загрузке
+        }
+
+        private void Page_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                LoginButton_Click(null, null); // Вызов обработчика входа
+            }
+        }
 
         private void LoginButton_Click(object sender, RoutedEventArgs e)
         {

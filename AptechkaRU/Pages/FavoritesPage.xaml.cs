@@ -35,13 +35,16 @@ namespace AptechkaRU.Pages
 
             var favorites = db.Favorites
                 .Where(f => f.user_id == userId)
+                .AsEnumerable()
                 .Select(f => new
                 {
                     f.favorite_id,
                     f.Medicines.name,
                     f.Medicines.description,
                     f.Medicines.price,
+                    f.Medicines.CurrentPhoto
                 })
+
                 .ToList();
 
             FavoritesList.ItemsSource = favorites;

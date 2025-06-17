@@ -6,8 +6,11 @@
       xmlns:local="clr-namespace:AptechkaRU.Pages"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
-      Title="LoginPage"
-      Background="#E0F7F4">
+      Title="LoginPage" 
+      Background="#E0F7F4"
+      KeyDown="Page_KeyDown"
+      Focusable="True"
+      Loaded="Page_Loaded">
 
     <Page.Resources>
 
@@ -18,18 +21,20 @@
                     <ControlTemplate TargetType="TextBox">
                         <Grid>
                             <Border Background="White"
-                                    BorderBrush="#4DB6AC"
-                                    BorderThickness="1.5"
-                                    CornerRadius="10"
-                                    SnapsToDevicePixels="True"/>
-                            <ScrollViewer Margin="8,0,0,0"
-                                          x:Name="PART_ContentHost"/>
+                            BorderBrush="#4DB6AC"
+                            BorderThickness="1.5"
+                            CornerRadius="10"
+                            SnapsToDevicePixels="True"/>
+                            <ScrollViewer x:Name="PART_ContentHost" 
+                                  VerticalAlignment="Center" />
                         </Grid>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
             <Setter Property="Height" Value="35"/>
             <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Padding" Value="10,0"/>
+            <!-- Добавим чуть-чуть отступа -->
         </Style>
 
         <!-- Стиль для PasswordBox со скруглениями -->
@@ -39,18 +44,21 @@
                     <ControlTemplate TargetType="PasswordBox">
                         <Grid>
                             <Border Background="White"
-                                    BorderBrush="#4DB6AC"
-                                    BorderThickness="1.5"
-                                    CornerRadius="10"/>
-                            <ScrollViewer Margin="8,0,0,0"
-                                          x:Name="PART_ContentHost"/>
+                            BorderBrush="#4DB6AC"
+                            BorderThickness="1.5"
+                            CornerRadius="10"/>
+                            <ScrollViewer x:Name="PART_ContentHost" 
+                                  VerticalAlignment="Center" />
                         </Grid>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
             <Setter Property="Height" Value="35"/>
             <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Padding" Value="10,0"/>
+            <!-- Для симметрии -->
         </Style>
+
 
     </Page.Resources>
 

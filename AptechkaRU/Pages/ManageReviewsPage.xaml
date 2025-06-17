@@ -8,24 +8,32 @@
       d:DesignHeight="450" d:DesignWidth="800" Background="#E0F7F4"
       Title="ManageReviewsPage">
 
-    <Grid>
+    <Grid Margin="20">
+
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <!-- Заголовок и фильтры -->
-        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="10">
+        <!-- Заголовок и фильтр -->
+        <StackPanel Grid.Row="0" Orientation="Horizontal" VerticalAlignment="Center" Margin="0 0 0 15">
             <TextBlock Text="Модерация отзывов" 
-                       FontSize="16" 
-                       FontWeight="Bold"
+                       FontSize="24" 
+                       FontWeight="Bold" 
+                       Foreground="#2B7A78" 
                        VerticalAlignment="Center"/>
 
             <ComboBox x:Name="cbFilter" 
-                      Margin="10,0,0,0" 
-                      Width="150"
-                      SelectedIndex="0">
+                      Width="180" 
+                      Margin="20 0 0 0"
+                      SelectedIndex="0"
+                      Background="White"
+                      Foreground="#17252A"
+                      BorderBrush="#3AAFA9"
+                      Padding="5"
+                      FontSize="14"
+                      VerticalAlignment="Center">
                 <ComboBox.Items>
                     <ComboBoxItem Content="Все отзывы"/>
                     <ComboBoxItem Content="На модерации"/>
@@ -42,49 +50,60 @@
                   CanUserAddRows="False"
                   SelectionMode="Single" 
                   SelectionUnit="FullRow" 
-                  Margin="10"
-                  IsReadOnly="True">
+                  Margin="0 0 0 15"
+                  IsReadOnly="True"
+                  RowBackground="White"
+                  AlternatingRowBackground="#D3F3F1"
+                  GridLinesVisibility="Horizontal"
+                  HeadersVisibility="Column"
+                  BorderBrush="#3AAFA9"
+                  BorderThickness="1"
+                  FontSize="14"
+                  Foreground="#17252A"
+                  >
             <DataGrid.Columns>
-                <DataGridTextColumn Header="ID" 
-                                   Binding="{Binding review_id}" 
-                                   Width="Auto"/>
-                <DataGridTextColumn Header="Пользователь" 
-                                   Binding="{Binding Users.username}" 
-                                   Width="*"/>
-                <DataGridTextColumn Header="Лекарство" 
-                                   Binding="{Binding Medicines.name}" 
-                                   Width="*"/>
-                <DataGridTextColumn Header="Рейтинг" 
-                                   Binding="{Binding rating}" 
-                                   Width="Auto"/>
-                <DataGridTextColumn Header="Дата" 
-                                   Binding="{Binding review_date, StringFormat=dd.MM.yyyy}" 
-                                   Width="Auto"/>
-                <DataGridCheckBoxColumn Header="Одобрен" 
-                                      Binding="{Binding is_approved}" 
-                                      Width="Auto"/>
+                <DataGridTextColumn Header="ID" Binding="{Binding review_id}" Width="60"/>
+                <DataGridTextColumn Header="Пользователь" Binding="{Binding Users.username}" Width="*"/>
+                <DataGridTextColumn Header="Лекарство" Binding="{Binding Medicines.name}" Width="*"/>
+                <DataGridTextColumn Header="Рейтинг" Binding="{Binding rating}" Width="80"/>
+                <DataGridTextColumn Header="Дата" Binding="{Binding review_date, StringFormat=dd.MM.yyyy}" Width="110"/>
+                <DataGridCheckBoxColumn Header="Одобрен" Binding="{Binding is_approved}" Width="80"/>
             </DataGrid.Columns>
         </DataGrid>
 
-        <!-- Панель действий -->
-        <StackPanel Grid.Row="2" 
-                    Orientation="Horizontal" 
-                    HorizontalAlignment="Right" 
-                    Margin="10">
+        <!-- Кнопки действий -->
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" >
             <Button x:Name="btnApprove" 
                     Content="Одобрить" 
-                    Width="100" 
-                    Margin="0,0,10,0" 
+                    Width="110" 
+                    Margin="0 0 10 0" 
+                    Background="#3AAFA9" 
+                    Foreground="White" 
+                    FontWeight="Bold"
+                    Padding="8,4"
                     Click="Approve_Click"/>
+
             <Button x:Name="btnReject" 
                     Content="Отклонить" 
-                    Width="100" 
-                    Margin="0,0,10,0" 
+                    Width="110" 
+                    Margin="0 0 10 0" 
+                    Background="#17252A" 
+                    Foreground="White" 
+                    FontWeight="Bold"
+                    Padding="8,4"
                     Click="Reject_Click"/>
+
             <Button x:Name="btnBack" 
                     Content="Назад" 
                     Width="80" 
+                    Background="Transparent"
+                    BorderBrush="#3AAFA9"
+                    BorderThickness="1"
+                    Foreground="#3AAFA9"
+                    FontWeight="Bold"
+                    Padding="8,4"
                     Click="Back_Click"/>
         </StackPanel>
+
     </Grid>
 </Page>

@@ -111,7 +111,7 @@ namespace AptechkaRU.Pages
         {
             ApplySearchFilterSort();
         }
-
+        
         //private void ComboFilter_SelectionChanged(object sender, SelectionChangedEventArgs e) => UpdateList();
         //private void ComboSort_SelectionChanged(object sender, SelectionChangedEventArgs e) => UpdateList();
         //private void TextSearch_TextChanged(object sender, TextChangedEventArgs e) => UpdateList();
@@ -150,6 +150,14 @@ namespace AptechkaRU.Pages
         private void ManageReviews_Click(object sender, RoutedEventArgs e)
         {
             NavigationService?.Navigate(new ManageReviewsPage()); // создадим позже
+        }
+        private void listMedicines_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            var selectedMedicine = listMedicines.SelectedItem as Medicines;
+            if (selectedMedicine != null)
+            {
+                NavigationService?.Navigate(new MedicineDetailsPage(selectedMedicine)); // создадим эту страницу
+            }
         }
 
         private void ExportCSV_Click(object sender, RoutedEventArgs e)

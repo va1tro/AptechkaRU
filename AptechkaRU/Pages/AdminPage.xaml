@@ -39,11 +39,11 @@
         <!-- Фильтр / поиск / экспорт -->
         <StackPanel Orientation="Horizontal" Grid.Row="1" Background="#B2DCD4">
             <ComboBox x:Name="ComboFilter" Width="200" Height="26" Margin="5"
-          SelectionChanged="ComboFilter_SelectionChanged"
-          ToolTip="Фильтрация по категориям"/>
+                      SelectionChanged="ComboFilter_SelectionChanged"
+                      ToolTip="Фильтрация по категориям"/>
             <ComboBox x:Name="ComboSort" Width="180" Height="26" Margin="5"
-          SelectionChanged="ComboSort_SelectionChanged"
-          ToolTip="Сортировка">
+                      SelectionChanged="ComboSort_SelectionChanged"
+                      ToolTip="Сортировка">
                 <ComboBoxItem Content="По алфавиту"/>
                 <ComboBoxItem Content="По цене (по возрастанию)"/>
                 <ComboBoxItem Content="По цене (по убыванию)"/>
@@ -57,35 +57,37 @@
         </StackPanel>
 
         <!-- Список товаров -->
-        <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto" >
-            <ItemsControl x:Name="listMedicines">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <WrapPanel IsItemsHost="True" HorizontalAlignment="Center"/>
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <Border BorderBrush="#82B5A9" BorderThickness="1" CornerRadius="8" Margin="10" Padding="10"
-                                MaxWidth="250" MinWidth="200" Height="380" Background="White">
-                            <StackPanel>
-                                <Image Source="{Binding CurrentPhoto}" Height="140" Stretch="UniformToFill" Margin="0,0,0,10"/>
-                                <TextBlock Text="{Binding name}" FontWeight="Bold" FontSize="16" TextAlignment="Center" Foreground="#2C6B60"/>
-                                <TextBlock Text="{Binding description}" TextWrapping="Wrap" FontSize="12" Margin="0,5"/>
-                                <TextBlock Text="{Binding price, StringFormat='Цена: {0} ₽'}" FontWeight="Bold" Foreground="#2C6B60"/>
-                                <TextBlock Text="{Binding Countries.country_name, StringFormat='Страна: {0}'}" Foreground="Gray" FontSize="12"/>
+        <ListView x:Name="listMedicines" MouseDoubleClick="listMedicines_MouseDoubleClick"
+          Grid.Row="2" Margin="10" ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+          Background="Transparent" BorderThickness="0">
+            <ListView.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel HorizontalAlignment="Center"/>
+                </ItemsPanelTemplate>
+            </ListView.ItemsPanel>
 
-                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,0">
-                                    <Button Content="✏" Click="EditMedicine_Click" Tag="{Binding medicine_id}" Width="40" Margin="5"/>
-                                    <Button Content="🗑" Click="DeleteMedicine_Click" Tag="{Binding medicine_id}" Width="40" Margin="5"/>
-                                    <Button Content="Отзывы" Click="ReviewsButton_Click" Tag="{Binding medicine_id}" Width="60" Margin="5"/>
-                                </StackPanel>
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <Border BorderBrush="#82B5A9" BorderThickness="1" CornerRadius="8" Margin="10" Padding="10"
+                    Width="280" Height="380" Background="White">
+                        <StackPanel>
+                            <Image Source="{Binding CurrentPhoto}" Height="140" Stretch="UniformToFill" Margin="0,0,0,10"/>
+                            <TextBlock Text="{Binding name}" FontWeight="Bold" FontSize="16" TextAlignment="Center" Foreground="#2C6B60"/>
+                            <TextBlock Text="{Binding description}" TextWrapping="Wrap" Margin="0,5" FontSize="12"/>
+                            <TextBlock Text="{Binding price, StringFormat='Цена: {0} ₽'}" FontWeight="Bold" Foreground="#2C6B60"/>
+                            <TextBlock Text="{Binding Countries.country_name, StringFormat='Страна: {0}'}" Foreground="Gray" FontSize="12"/>
+
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,0">
+                                <Button Content="✏" Click="EditMedicine_Click" Tag="{Binding medicine_id}" Background="#82B5A9" Foreground="White" Width="40" Height="30" Margin="5" BorderThickness="0" Cursor="Hand"/>
+                                <Button Content="🗑" Click="DeleteMedicine_Click" Tag="{Binding medicine_id}" Background="#82B5A9" Foreground="White" Width="40" Height="30" Margin="5" BorderThickness="0" Cursor="Hand"/>
+                                <Button Content="Отзывы" Click="ReviewsButton_Click" Tag="{Binding medicine_id}" Background="#82B5A9" Foreground="White" Width="60" Height="30" Margin="5" BorderThickness="0" Cursor="Hand"/>
                             </StackPanel>
-                        </Border>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-        </ScrollViewer>
+                        </StackPanel>
+                    </Border>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+
 
         <!-- Статус -->
         <TextBlock x:Name="tbCounter" Grid.Row="3" Margin="10" Foreground="#2C6B60"/>

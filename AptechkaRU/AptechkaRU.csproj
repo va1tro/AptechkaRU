@@ -423,6 +423,7 @@
     <Resource Include="Images\mezim.jpg" />
     <Resource Include="Images\nurofen.jpg" />
     <Resource Include="Images\omega3.jpg" />
+    <Resource Include="Images\photo_2025-06-08_11-30-14.jpg" />
     <Content Include="Images\picture.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

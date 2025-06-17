@@ -25,11 +25,9 @@ using QuestPDF.Fluent;
 using QuestPDF.Helpers;
 using QuestPDF.Infrastructure;
 
+
 namespace AptechkaRU.Pages
 {
-    /// <summary>
-    /// Логика взаимодействия для CartPage.xaml
-    /// </summary>
     public partial class CartPage : Page
     {
         private AptechkaRUEntities1 db = new AptechkaRUEntities1();
@@ -126,6 +124,14 @@ namespace AptechkaRU.Pages
 
         private void GenerateReceiptWithQuestPDF(PurchaseHistory purchase, List<Cart> cartItems)
         {
+            QuestPDF.Settings.License = LicenseType.Community;
+
+            if (purchase == null || cartItems == null || !cartItems.Any())
+            {
+                MessageBox.Show("Ошибка: Данные для чека отсутствуют.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
             try
             {
                 var saveFileDialog = new SaveFileDialog
@@ -140,10 +146,13 @@ namespace AptechkaRU.Pages
                     {
                         container.Page(page =>
                         {
+                            page.Size(PageSizes.A5); // Установим размер страницы для читаемости
+                            page.Margin(1, Unit.Centimetre); // Добавим отступы
                             page.Content().Column(column =>
                             {
                                 column.Item().Text("Аптечка.РУ").Bold().FontSize(20);
-                                column.Item().Text("Кассовый чек").Bold().FontSize(16);
+                                column.Item().Text($"Кассовый чек #{purchase.purchase_id}").Bold().FontSize(16);
+                                column.Item().Text($"Дата: {purchase.purchase_date:dd.MM.yyyy HH:mm}").FontSize(12);
 
                                 column.Item().Table(table =>
                                 {
@@ -165,14 +174,19 @@ namespace AptechkaRU.Pages
 
                                     foreach (var item in cartItems)
                                     {
-                                        table.Cell().Text(item.Medicines.name);
+                                        if (item.Medicines == null)
+                                        {
+                                            continue; // Пропускаем, если данные отсутствуют
+                                        }
+                                        table.Cell().Text(item.Medicines.name ?? "Не указано");
                                         table.Cell().Text(item.Medicines.price.ToString("C"));
                                         table.Cell().Text(item.quantity.ToString());
                                         table.Cell().Text((item.Medicines.price * item.quantity).ToString("C"));
                                     }
                                 });
 
-                                column.Item().AlignRight().Text($"Итого: {purchase.total_amount:C}").Bold();
+                                column.Item().AlignRight().Text($"Итого: {purchase.total_amount:C}").Bold().FontSize(14);
+                                column.Item().Text("Спасибо за покупку!").FontSize(12);
                             });
                         });
                     });
@@ -183,7 +197,7 @@ namespace AptechkaRU.Pages
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Ошибка: {ex.Message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"Ошибка при создании чека: {ex.Message}\nПодробности: {ex.StackTrace}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
     }

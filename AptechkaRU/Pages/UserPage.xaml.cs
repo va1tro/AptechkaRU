@@ -27,7 +27,6 @@ namespace AptechkaRU.Pages
         public UserPage()
         {
             InitializeComponent();
-            LoadFilters();
             LoadMedicines();
             Loaded += UserPage_Loaded;
         }
